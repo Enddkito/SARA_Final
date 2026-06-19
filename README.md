@@ -24,13 +24,3 @@ Requisitos Previos
 ##  Licencia
 ![Licencia MIT](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)
 Este proyecto está bajo la protección de la Licencia **MIT**. 
-
-
-## 🔑 Credenciales de Acceso para Pruebas
-### Rol: Profesor
-- **Correo:** profesor@epn.edu.ec
-- **Contraseña:** profesor123
-
-### Rol: Estudiante
-- **Correo:** emily.natsha.lara@gmail.com
-- **Contraseña:** progresando123
