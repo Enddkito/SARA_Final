@@ -1,10 +1,10 @@
 # SARA - Sistema de Análisis de Rendimiento Académico
 
-## 🚀 Descripción del Proyecto
+##  Descripción del Proyecto
 SARA es una aplicación de escritorio desarrollada en Java con Swing que permite gestionar el rendimiento académico de estudiantes y optimizar el flujo de trabajo de los docentes en la calificación de celdas y persistencia de datos.
 
-## 🛠️ Tecnologías y Arquitectura
-## 🛠️ Tecnologías y Herramientas
+##  Tecnologías y Arquitectura
+
 
 A continuación se detallan las tecnologías clave utilizadas para el diseño, desarrollo y persistencia del ecosistema SARA:
 
@@ -16,7 +16,7 @@ A continuación se detallan las tecnologías clave utilizadas para el diseño, d
 | **Git & GitHub** | Control de versiones distribuido y gestión de ramas | ![Git](https://img.shields.io/badge/GIT-E44D26?style=for-the-badge&logo=git&logoColor=white) |
 | **Archivos CSV** | Persistencia ligera de datos local para credenciales y notas | ![CSV](https://img.shields.io/badge/Data--CSV-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white) |
 
-## 📄 Licencia y Permisos
+##  Licencia y Permisos
 
 Este proyecto está bajo la protección de la Licencia **MIT**. 
 
