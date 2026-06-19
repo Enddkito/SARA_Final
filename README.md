@@ -35,10 +35,13 @@ SARA es una aplicación backend + escritorio para centralizar, procesar y analiz
 - Sistema modular pensado para añadir nuevas métricas e integraciones.
 
 ## Tecnologías
-- Java SE (la rama del repo indica Java; recomiendo Java 17+ como LTS, verifica compatibilidad si usas JDK 26).
-- Java Swing para GUI.
-- CSV para persistencia ligera.
-- Git & GitHub para control de versiones.
+| Tecnología | Uso en el proyecto | Notas |
+|---|---|---|
+| Java SE | Lógica de negocio, controladores y arquitectura orientada a objetos (POO) | Java |
+| Java Swing | Construcción de la interfaz gráfica de usuario (GUI) | Swing |
+| IntelliJ IDEA | Entorno de desarrollo integrado y depuración de código | IntelliJ IDEA |
+| Git & GitHub | Control de versiones distribuido y gestión de ramas | Git |
+| Archivos CSV | Persistencia ligera para credenciales, notas y export/import de datos | CSV |
 
 ## Requisitos
 - Java Development Kit (JDK) instalado. Recomendado: Java 17 (o la versión que uses en tu entorno).
