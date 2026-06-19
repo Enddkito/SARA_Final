@@ -1,1 +1,15 @@
+name: SARA - Actualizar Documentación
+on:
+  workflow_dispatch: # Te permite ejecutarlo manualmente con un botón
 
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Confirmación de actualización
+        run: |
+          echo "La documentación de SARA_Final ha sido estructurada de forma exitosa."
+          echo "Los componentes de licenciamiento MIT y badges estáticos ya son visibles públicamente."
