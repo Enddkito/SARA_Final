@@ -17,6 +17,7 @@ A continuación se detallan las tecnologías clave utilizadas para el diseño, d
 | **Archivos CSV** | Persistencia ligera de datos local para credenciales y notas | ![CSV](https://img.shields.io/badge/Data--CSV-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white) |
 
 ##  Licencia y Permisos
+![Métricas de Licencia](https://raw.githubusercontent.com/Enddkito/SARA_Final/main/metrics.plugin.licenses.sara.svg)
 
 Este proyecto está bajo la protección de la Licencia **MIT**. 
 
