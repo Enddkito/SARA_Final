@@ -115,8 +115,11 @@ public class LoginFrame extends JFrame {
             for (ec.edu.epn.sara.domain.Student s : listaEstudiantes) {
                 if (s.getEmail().equalsIgnoreCase(email) && s.getPassword().equals(password)) {
                     encontrado = true;
-                    JOptionPane.showMessageDialog(this, "¡Autenticación Exitosa!\nBienvenido(a) Estudiante: " + s.getFirstName() + " " + s.getLastName());
-                    // Aquí se abrirá el StudentDashboard en el futuro
+                    JOptionPane.showMessageDialog(this, "¡Autenticación Exitosa!\nBienvenido(a) al sistema SARA.", "Acceso Concedido", JOptionPane.INFORMATION_MESSAGE);
+
+                    this.dispose(); // Oculta el login
+                    // Abrimos el nuevo Dashboard pasándole el objeto estudiante 's' cargado del CSV y el Login actual
+                    new StudentDashboard(s, this).setVisible(true);
                     break;
                 }
             }

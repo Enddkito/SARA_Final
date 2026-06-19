@@ -14,6 +14,7 @@ public class CSVDataPersistence {
 
     private static final String STUDENT_FILE = "students.csv";
     private static final String PROFESSOR_FILE = "professors.csv";
+    private static final String GRADES_FILE = "grades.csv";
 
     /**
      * Guarda la lista de estudiantes en un archivo CSV.
@@ -62,7 +63,7 @@ public class CSVDataPersistence {
     public void saveProfessors(List<Professor> professors) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(PROFESSOR_FILE))) {
             for (Professor p : professors) {
-                // Formato: id,firstName,lastName,email,password,specialty
+                // Formato completo de 6 campos requerido por tu dominio: id,firstName,lastName,email,password,specialty
                 bw.write(p.getId() + "," + p.getFirstName() + "," + p.getLastName() + "," +
                         p.getEmail() + "," + p.getPassword() + "," + p.getSpecialty());
                 bw.newLine();
@@ -74,15 +75,49 @@ public class CSVDataPersistence {
     }
 
     /**
+     * Carga la lista de profesores autorizados desde el archivo professors.csv.
+     */
+    public List<Professor> loadProfessors() {
+        List<Professor> professors = new ArrayList<>();
+        File file = new File(PROFESSOR_FILE);
+
+        if (!file.exists()) {
+            System.err.println("Advertencia: El archivo professors.csv no existe. Creando uno vacío.");
+            return professors;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length >= 5) {
+                    String id = data[0].trim();
+                    String firstName = data[1].trim();
+                    String lastName = data[2].trim();
+                    String email = data[3].trim();
+                    String password = data[4].trim();
+
+                    // Si el archivo trae el sexto campo lo lee, si no, le pone "Docente EPN" por defecto
+                    String specialty = (data.length >= 6) ? data[5].trim() : "Docente EPN";
+
+                    // SOLUCIÓN: Inyectamos los 6 argumentos exactos que espera tu modelo
+                    Professor prof = new Professor(id, firstName, lastName, email, password, specialty);
+                    professors.add(prof);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error de lectura en professors.csv: " + e.getMessage());
+        }
+        return professors;
+    }
+
+    /**
      * Carga un archivo CSV externo provisto por un profesor y actualiza las notas de los estudiantes.
      * Formato esperado del CSV: id_estudiante,codigo_materia,nota_componente1,nota_componente2
      */
-    public void importGradesFromProfessorCSV(String filePath, java.util.List<Student> systemStudents, java.util.List<ec.edu.epn.sara.domain.Course> availableCourses) {
+    public void importGradesFromProfessorCSV(String filePath, List<Student> systemStudents, List<ec.edu.epn.sara.domain.Course> availableCourses) {
         File file = new File(filePath);
-        if (!file.exists()) {
-            System.err.println("Error: El archivo de calificaciones no existe en la ruta especificada.");
-            return;
-        }
+        if (!file.exists()) return;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -90,75 +125,154 @@ public class CSVDataPersistence {
 
             while ((line = br.readLine()) != null) {
                 lineCount++;
-                // Omitir la cabecera si el archivo Excel la incluye (ej: "ID,Materia,C1,C2")
-                if (lineCount == 1 && line.toLowerCase().contains("id")) {
+                if (lineCount == 1 && (line.toLowerCase().contains("id") || line.toLowerCase().contains("estudiante"))) {
                     continue;
                 }
+
+                // SOPORTE DOBLE: Divide por coma o por punto y coma según cómo guardó Excel
+                String[] data = line.contains(";") ? line.split(";") : line.split(",");
+
+                if (data.length >= 4) {
+                    String studentId = data[0].trim();
+                    String courseCode = data[1].trim();
+                    double c1 = Double.parseDouble(data[2].trim());
+                    double c2 = Double.parseDouble(data[3].trim());
+
+                    // 1. Buscar al estudiante
+                    Student targetStudent = null;
+                    for (Student s : systemStudents) {
+                        if (s.getId().equals(studentId)) {
+                            targetStudent = s;
+                            break;
+                        }
+                    }
+
+                    if (targetStudent != null) {
+                        // 2. Buscar si ya tiene la matrícula hecha
+                        ec.edu.epn.sara.domain.Enrollment targetEnrollment = null;
+                        for (ec.edu.epn.sara.domain.Enrollment e : targetStudent.getEnrollments()) {
+                            if (e.getCourse().getCode().equals(courseCode)) {
+                                targetEnrollment = e;
+                                break;
+                            }
+                        }
+
+                        // 3. SOLUCIÓN: Si no está matriculado, creamos el curso y lo inscribimos en caliente
+                        if (targetEnrollment == null) {
+                            ec.edu.epn.sara.domain.Course newCourse = null;
+                            for (ec.edu.epn.sara.domain.Course c : availableCourses) {
+                                if (c.getCode().equals(courseCode)) {
+                                    newCourse = c;
+                                    break;
+                                }
+                            }
+                            // Si el curso no existe en el catálogo global, lo instanciamos como un curso teórico
+                            if (newCourse == null) {
+                                newCourse = new ec.edu.epn.sara.domain.TheoryCourse(courseCode, "Materia " + courseCode);
+                                availableCourses.add(newCourse);
+                            }
+
+                            targetEnrollment = new ec.edu.epn.sara.domain.Enrollment(newCourse);
+                            targetStudent.addEnrollment(targetEnrollment);
+                        }
+
+                        // 4. Inyectar las calificaciones
+                        targetEnrollment.updateGrades(c1, c2);
+                    }
+                }
+            }
+
+            // Guardar el estado consolidado de las notas en el archivo independiente
+            saveAllGrades(systemStudents);
+
+        } catch (Exception e) {
+            System.err.println("Error procesando CSV: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guarda todas las calificaciones de la aplicación en el archivo maestro grades.csv.
+     */
+    public void saveAllGrades(List<Student> students) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(GRADES_FILE))) {
+            // Cabecera informativa para el CSV
+            bw.write("id_estudiante,codigo_materia,nota_componente1,nota_componente2");
+            bw.newLine();
+
+            for (Student s : students) {
+                if (s.getEnrollments() != null) {
+                    for (ec.edu.epn.sara.domain.Enrollment e : s.getEnrollments()) {
+                        bw.write(s.getId() + "," + e.getCourse().getCode() + "," +
+                                e.getComponent1() + "," + e.getComponent2());
+                        bw.newLine();
+                    }
+                }
+            }
+            System.out.println("Sistema: Archivo maestro grades.csv actualizado con éxito.");
+        } catch (IOException e) {
+            System.err.println("Error de Infraestructura al guardar grades.csv: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Carga las notas desde grades.csv y las vincula a los estudiantes en memoria.
+     */
+    public void loadGradesIntoStudents(List<Student> students, List<ec.edu.epn.sara.domain.Course> availableCourses) {
+        File file = new File(GRADES_FILE);
+        if (!file.exists()) return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(GRADES_FILE))) {
+            String line;
+            int lineCount = 0;
+            while ((line = br.readLine()) != null) {
+                lineCount++;
+                if (lineCount == 1 && line.toLowerCase().contains("id")) continue; // Omitir cabecera
 
                 String[] data = line.split(",");
                 if (data.length == 4) {
                     String studentId = data[0].trim();
                     String courseCode = data[1].trim();
+                    double c1 = Double.parseDouble(data[2].trim());
+                    double c2 = Double.parseDouble(data[3].trim());
 
-                    try {
-                        double c1 = Double.parseDouble(data[2].trim());
-                        double c2 = Double.parseDouble(data[3].trim());
-
-                        // 1. Buscar al estudiante en los registros del sistema
-                        Student targetStudent = null;
-                        for (Student s : systemStudents) {
-                            if (s.getId().equals(studentId)) {
-                                targetStudent = s;
-                                break;
-                            }
-                        }
-
-                        if (targetStudent != null) {
-                            // 2. Buscar si el estudiante ya tiene esa materia asignada (Enrollment)
-                            ec.edu.epn.sara.domain.Enrollment targetEnrollment = null;
-                            for (ec.edu.epn.sara.domain.Enrollment e : targetStudent.getEnrollments()) {
+                    // Buscar estudiante y vincular la nota
+                    for (Student s : students) {
+                        if (s.getId().equals(studentId)) {
+                            // Buscar si ya tiene el enrollment
+                            ec.edu.epn.sara.domain.Enrollment targetEnc = null;
+                            for (ec.edu.epn.sara.domain.Enrollment e : s.getEnrollments()) {
                                 if (e.getCourse().getCode().equals(courseCode)) {
-                                    targetEnrollment = e;
+                                    targetEnc = e;
                                     break;
                                 }
                             }
-
-                            // 3. Si no está inscrito, buscamos el curso y lo inscribimos dinámicamente
-                            if (targetEnrollment == null) {
+                            // Si no existe, crear el curso y el enrollment dinámicamente
+                            if (targetEnc == null) {
+                                ec.edu.epn.sara.domain.Course course = null;
                                 for (ec.edu.epn.sara.domain.Course c : availableCourses) {
                                     if (c.getCode().equals(courseCode)) {
-                                        targetEnrollment = new ec.edu.epn.sara.domain.Enrollment(c);
-                                        targetStudent.addEnrollment(targetEnrollment);
+                                        course = c;
                                         break;
                                     }
                                 }
+                                if (course == null) {
+                                    course = new ec.edu.epn.sara.domain.TheoryCourse(courseCode, "Materia " + courseCode);
+                                    availableCourses.add(course);
+                                }
+                                targetEnc = new ec.edu.epn.sara.domain.Enrollment(course);
+                                s.addEnrollment(targetEnc);
                             }
-
-                            // 4. Actualizar las calificaciones usando tu excepción personalizada
-                            if (targetEnrollment != null) {
-                                targetEnrollment.updateGrades(c1, c2);
-                                System.out.println("Línea " + lineCount + ": Notas actualizadas para " + targetStudent.getFirstName() + " en " + courseCode);
+                            try {
+                                targetEnc.updateGrades(c1, c2);
+                            } catch (Exception ex) {
+                                // Ignorar registros corruptos en la carga inicial
                             }
-                        } else {
-                            System.out.println("Línea " + lineCount + ": Advertencia - Estudiante con ID " + studentId + " no existe en el sistema.");
                         }
-
-                    } catch (NumberFormatException nfe) {
-                        System.err.println("Línea " + lineCount + ": Error de formato numérico en las notas.");
-                    } catch (ec.edu.epn.sara.domain.NotaInvalidaException nie) {
-                        // ¡Aquí atrapamos tu excepción si el Excel viene con notas como 11.5 o -1!
-                        System.err.println("Línea " + lineCount + ": " + nie.getMessage());
                     }
                 }
             }
-
-            // Al finalizar la carga, guardamos el estado maestro actualizado de los estudiantes
-            saveStudents(systemStudents);
-            System.out.println("\n=== Carga masiva finalizada. Base de datos actualizada ===");
-
-        } catch (IOException e) {
-            System.err.println("Error crítico al procesar la carga masiva: " + e.getMessage());
+        } catch (IOException | NumberFormatException e) {
+            System.err.println("Error al cargar las notas iniciales: " + e.getMessage());
         }
     }
-
 }
