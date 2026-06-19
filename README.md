@@ -4,14 +4,6 @@
 
 SARA es una solución de software backend y de escritorio diseñada para centralizar, procesar y analizar métricas de rendimiento estudiantil y docente. El sistema implementa una arquitectura modular orientada a objetos (POO) bajo principios SOLID, garantizando un acoplamiento débil y una alta cohesión en el procesamiento de registros académicos.
 
-## 🏗️ Arquitectura y Componentes del Sistema
-
-El proyecto está estructurado bajo un patrón arquitectónico desacoplado, separando estrictamente la lógica de negocio de las interfaces de consumo:
-
-*   **Core / Lógica de Negocio:** Controladores encargados del cálculo de indicadores de rendimiento, gestión de estados académicos (aprobación, reprobación, alertas tempranas) y parsing de estructuras de datos.
-*   **Capa de Persistencia Simétrica:** Módulo nativo de Entrada/Salida (I/O) que gestiona la persistencia de datos en archivos planos estructurados (CSV). Implementa lectura y escritura síncrona para asegurar la integridad de credenciales, asignaturas y calificaciones de forma local.
-*   **Interfaz de Usuario (GUI):** Subsistema gráfico desarrollado sobre Java Swing que expone tableros de control diferenciados por roles (Docente / Estudiante) para la visualización de analíticas en tiempo real.
-
 ##  Tecnologías y Arquitectura
 
 A continuación se detallan las tecnologías clave utilizadas para el diseño, desarrollo y persistencia del ecosistema SARA:
