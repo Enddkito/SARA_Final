@@ -4,9 +4,14 @@
   <img src="SARA_Banner.png" alt="SARA Banner" width="100%">
 </p>
 
-SARA es una aplicación backend + escritorio para centralizar, procesar y analizar métricas de rendimiento estudiantil y docente. Provee una interfaz gráfica (Java Swing) para la gestión de usuarios, notas y reportes, y utiliza CSV para persistencia ligera local.
+[![Build](https://img.shields.io/github/actions/workflow/status/Enddkito/SARA_Final/ci.yml?branch=main&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/actions)
+[![License](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/blob/main/LICENSE)
+[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)]()
+[![Issues](https://img.shields.io/github/issues/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/issues)
+[![Last commit](https://img.shields.io/github/last-commit/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/commits)
+[![Contributors](https://img.shields.io/github/contributors/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/graphs/contributors)
 
-![Licencia MIT](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)
+SARA es una aplicación backend + escritorio para centralizar, procesar y analizar métricas de rendimiento estudiantil y docente. Provee una interfaz gráfica (Java Swing) para la gestión de usua[...]
 
 ## Tabla de contenidos
 - [Características](#características)
@@ -38,7 +43,7 @@ SARA es una aplicación backend + escritorio para centralizar, procesar y analiz
 ## Requisitos
 - Java Development Kit (JDK) instalado. Recomendado: Java 17 (o la versión que uses en tu entorno).
 - IDE recomendado: IntelliJ IDEA u otro IDE Java.
-- Herramienta de construcción: actualmente no se detecta pom.xml ni build.gradle en la raíz; las instrucciones siguientes usan comandos genéricos de Java. Si quieres que añada un build con Maven o Gradle, dímelo y lo configuro.
+- Herramienta de construcción: actualmente no se detecta pom.xml ni build.gradle en la raíz; las instrucciones siguientes usan comandos genéricos de Java. Si quieres que añada un build con Mav[...]
 
 ## Instalación
 1. Clona el repositorio:
@@ -117,4 +122,3 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
 ## Contacto
 Autor: Enddkito (GitHub: @Enddkito)
-
