@@ -1,5 +1,6 @@
-# SARA - Sistema de Análisis de Rendimiento Académico
-
+<p align="center">
+  <img src="SARA_Banner.png" alt="SARA Banner" width="100%">
+</p>
 ##  Descripción del Proyecto
 SARA es una aplicación de escritorio desarrollada en Java con Swing que permite gestionar el rendimiento académico de estudiantes y optimizar el flujo de trabajo de los docentes en la calificación de celdas y persistencia de datos.
 
