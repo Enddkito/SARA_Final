@@ -28,15 +28,17 @@ public class ProfessorDashboard extends JFrame {
     private JFrame loginFrame;
     private List<Student> systemStudents;
     private List<ec.edu.epn.sara.domain.Course> availableCourses;
+    private String currentProfessorId; // Nueva variable de instancia para el filtro dinámico
 
-    public ProfessorDashboard(JFrame loginWindow) {
+    // Constructor único unificado que recibe el ID del profesor que inició sesión
+    public ProfessorDashboard(JFrame loginWindow, String professorId) {
         this.loginFrame = loginWindow;
+        this.currentProfessorId = professorId; // Guardamos el ID dinámico
         this.persistence = new CSVDataPersistence();
         this.availableCourses = new ArrayList<>();
 
-        // 1. Cargar la información base del sistema desde los archivos
-        this.systemStudents = persistence.loadStudents();
-        persistence.loadGradesIntoStudents(systemStudents, availableCourses);
+        // 1. Cargar la información base del sistema de forma relacional conectando los archivos
+        this.systemStudents = persistence.loadFullSystemData(this.availableCourses);
 
         // 2. Configurar Ventana Principal
         setTitle("SARA - Panel de Control del Docente");
@@ -80,7 +82,7 @@ public class ProfessorDashboard extends JFrame {
         tableGrades.getTableHeader().setReorderingAllowed(false);
         tableGrades.setRowHeight(24); // Filas más altas y legibles
 
-        // Rellenar la tabla con los datos que existan en el sistema
+        // Rellenar la tabla aplicando el filtro por profesor
         refreshTableData();
 
         panelCenter.add(new JScrollPane(tableGrades), BorderLayout.CENTER);
@@ -132,21 +134,27 @@ public class ProfessorDashboard extends JFrame {
     }
 
     /**
-     * Limpia la rejilla y vuelve a volcar los datos actualizados desde la memoria principal.
+     * Limpia la rejilla y vuelve a volcar los datos actualizados filtrando exclusivamente
+     * por las materias que corresponden al profesor que inició sesión.
      */
     private void refreshTableData() {
         tableModel.setRowCount(0);
         for (Student s : systemStudents) {
             if (s.getEnrollments() != null) {
                 for (Enrollment enc : s.getEnrollments()) {
-                    Object[] row = {
-                            s.getId(),
-                            s.getFirstName() + " " + s.getLastName(),
-                            enc.getCourse().getCode(),
-                            enc.getComponent1(),
-                            enc.getComponent2()
-                    };
-                    tableModel.addRow(row);
+                    ec.edu.epn.sara.domain.Course curso = enc.getCourse();
+
+                    // FILTRO DINÁMICO: Solo muestra la fila si la materia le pertenece al profesor conectado
+                    if (curso.getProfessor() != null && curso.getProfessor().getId().equals(this.currentProfessorId)) {
+                        Object[] row = {
+                                s.getId(),
+                                s.getFirstName() + " " + s.getLastName(),
+                                curso.getCode(),
+                                enc.getComponent1(),
+                                enc.getComponent2()
+                        };
+                        tableModel.addRow(row);
+                    }
                 }
             }
         }
@@ -172,7 +180,6 @@ public class ProfessorDashboard extends JFrame {
             JOptionPane.showMessageDialog(this, "Acta procesada y volcada con éxito al visor del profesor.", "Operación Exitosa", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
 
     /**
      * Lee lo que el profesor editó con sus dedos en las celdas y lo consolida en el archivo físico.
