@@ -16,10 +16,30 @@ public class Professor extends User {
     public void setSpecialty(String specialty) { this.specialty = specialty; }
 
     /**
+     * Métodos de conveniencia para obtener el ID y el nombre completo
+     * necesarios para la vinculación con los cursos y persistencia CSV.
+     */
+    public String getId() {
+        return super.getId(); // Retorna el ID heredado de la clase User
+    }
+
+    public String getName() {
+        return super.getFirstName() + " " + super.getLastName(); // Construye el nombre completo desde User
+    }
+
+    /**
      * Sobreescritura polimórfica del método abstracto de la clase padre.
      */
     @Override
     public String getRole() {
         return "Professor";
+    }
+
+    /**
+     * Representación en formato de texto del profesor.
+     */
+    @Override
+    public String toString() {
+        return getName() + " (ID: " + getId() + ")";
     }
 }
