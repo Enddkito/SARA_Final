@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.example.sara_ap.controller.TeacherController"
+            prefWidth="650.0" prefHeight="500.0"
+            style="-fx-background-color: #F8FAFC;">
+
+    <Label fx:id="lblBienvenida" text="Panel del Docente" layoutX="30.0" layoutY="25.0"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" />
+
+    <Label text="Seleccione la Materia / Curso:" layoutX="30.0" layoutY="75.0"
+           style="-fx-font-weight: bold; -fx-text-fill: #334155;" />
+
+    <ComboBox fx:id="cmbCursos" layoutX="220.0" layoutY="70.0" prefWidth="220.0"
+              onAction="#onCursoSeleccionado" promptText="Seleccionar materia..." />
+
+    <Label fx:id="lblAlertaDesviacion" text="" layoutX="30.0" layoutY="112.0"
+           style="-fx-text-fill: #DC2626; -fx-font-weight: bold; -fx-font-size: 13px;" />
+
+    <TableView fx:id="tblNotas" layoutX="30.0" layoutY="145.0" prefWidth="590.0" prefHeight="280.0"
+               style="-fx-background-radius: 6; -fx-border-radius: 6;">
+        <columns>
+            <TableColumn fx:id="colId" text="ID Estudiante" prefWidth="110.0" />
+            <TableColumn fx:id="colNombre" text="Nombre Estudiante" prefWidth="200.0" />
+            <TableColumn fx:id="colNota" text="Nota Final" prefWidth="120.0" />
+            <TableColumn fx:id="colEstado" text="Estado Predictivo" prefWidth="158.0" />
+        </columns>
+    </TableView>
+
+    <Button text="Cerrar Sesión" layoutX="520.0" layoutY="445.0" onAction="#onLogoutClick"
+            style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;" prefWidth="100.0" prefHeight="35.0" />
+
+</AnchorPane>
