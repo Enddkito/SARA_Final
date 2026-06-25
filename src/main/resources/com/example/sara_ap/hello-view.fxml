@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.example.sara_ap.controller.HelloController"
+            prefWidth="450.0" prefHeight="400.0"
+            style="-fx-background-color: #F4F6F9;">
+
+    <!-- Encabezado Principal -->
+    <Label text="SARA" layoutX="183.0" layoutY="50.0"
+           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" />
+
+    <Label text="Sistema de Análisis de Rendimiento Académico" layoutX="78.0" layoutY="95.0"
+           style="-fx-font-size: 14px; -fx-text-fill: #64748B; -fx-font-style: italic;" />
+
+    <Label text="Selecciona tu perfil para ingresar:" layoutX="123.0" layoutY="160.0"
+           style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #334155;" />
+
+    <!-- Contenedor de Botones de Perfil -->
+    <VBox layoutX="75.0" layoutY="200.0" spacing="20.0" prefWidth="300.0">
+
+        <!-- Botón Profesor -->
+        <Button fx:id="btnProfesor" text="👨‍🏫 Soy Profesor" onAction="#onProfesorClick"
+                prefWidth="300.0" prefHeight="55.0"
+                style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+        <!-- Botón Estudiante -->
+        <Button fx:id="btnEstudiante" text="🎓 Soy Estudiante" onAction="#onEstudianteClick"
+                prefWidth="300.0" prefHeight="55.0"
+                style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+    </VBox>
+
+</AnchorPane>

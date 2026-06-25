@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #F4F6F9;" styleClass="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 50; -fx-font-weight: bold; -fx-cursor: hand;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.HelloController">
+
+    <Label fx:id="lblTipoAcceso" alignment="CENTER" contentDisplay="CENTER" layoutX="75.0" layoutY="40.0" prefHeight="32.0" prefWidth="300.0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1E293B;" text="Ingreso de Credenciales" />
+
+    <Label alignment="CENTER" layoutX="75.0" layoutY="75.0" prefHeight="18.0" prefWidth="300.0" style="-fx-font-size: 12px; -fx-text-fill: #64748B;" text="Por favor, introduzca sus datos institucionales." />
+
+    <Label layoutX="75.0" layoutY="120.0" style="-fx-font-weight: bold; -fx-text-fill: #334155;" text="Correo Institucional:" />
+    <TextField fx:id="txtEmail" layoutX="75.0" layoutY="145.0" prefHeight="35.0" prefWidth="300.0" promptText="ejemplo@epn.edu.ec" />
+
+    <Label layoutX="75.0" layoutY="200.0" style="-fx-font-weight: bold; -fx-text-fill: #334155;" text="Contraseña:" />
+    <PasswordField fx:id="txtPassword" layoutX="75.0" layoutY="225.0" prefHeight="35.0" prefWidth="300.0" promptText="••••••••" />
+
+    <Button layoutX="152.0" layoutY="295.0" onAction="#onAutenticarClick" prefHeight="35.0" prefWidth="150.0" style="-fx-background-color: #1E293B; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;" text="Iniciar Sesión" />
+
+    <Button fx:id="btnVolver" text="←" layoutX="20.0" layoutY="20.0" onAction="#onVolverClick"
+            style="-fx-background-color: #E2E8F0; -fx-text-fill: #475569; -fx-background-radius: 50; -fx-font-size: 16px; -fx-font-weight: bold; -fx-cursor: hand;" prefWidth="40.0" prefHeight="40.0" />
+</AnchorPane>
