@@ -117,12 +117,16 @@ public class HelloController {
     }
 
     // 🔄 Método utilitario para alternar los diseños FXML dentro de la misma ventana
+    // 🔄 Método utilitario adaptado para respetar el tamaño responsivo de cada FXML
     private void cambiarPantalla(String fxmlFile) {
         try {
             Stage stage = (Stage) Stage.getWindows().filtered(w -> w.isShowing()).get(0);
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
-            Scene newScene = new Scene(fxmlLoader.load(), 450, 400);
+
+            // Al no quemar los números de ancho y alto aquí, se adapta al diseño original del FXML
+            Scene newScene = new Scene(fxmlLoader.load());
             stage.setScene(newScene);
+            stage.centerOnScreen(); // Mantiene la ventana bien centrada al cambiar de tamaño
         } catch (IOException e) {
             System.err.println("Error al cambiar a la pantalla " + fxmlFile + ": " + e.getMessage());
         }
