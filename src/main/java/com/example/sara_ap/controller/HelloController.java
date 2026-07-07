@@ -127,4 +127,5 @@ public class HelloController {
             System.err.println("Error al cambiar a la pantalla " + fxmlFile + ": " + e.getMessage());
         }
     }
+
 }
