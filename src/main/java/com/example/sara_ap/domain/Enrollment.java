@@ -1,50 +1,52 @@
 package com.example.sara_ap.domain;
 
 public class Enrollment {
+    private Student student;
     private Course course;
-    private double component1;
-    private double component2;
-    private double finalGrade;
-    private String predictionStatus; // "Aprobado", "En Riesgo", "Reprobado"
+
+    // Arreglos de 5 posiciones: [0]=P. Virtual, [1]=P. Presencial, [2]=Examen, [3]=Talleres, [4]=Deberes
+    private double[] notasBimestre1 = new double[5];
+    private double[] notasBimestre2 = new double[5];
 
     public Enrollment(Course course) {
         this.course = course;
-        this.component1 = 0.0;
-        this.component2 = 0.0;
-        this.finalGrade = 0.0;
-        this.predictionStatus = "Sin Registrar";
     }
+
+    public Enrollment(Student student, Course course) {
+        this.student = student;
+        this.course = course;
+    }
+
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
 
     public Course getCourse() { return course; }
+    public void setCourse(Course course) { this.course = course; }
 
-    public double getComponent1() { return component1; }
-    public double getComponent2() { return component2; }
-    public double getFinalGrade() { return finalGrade; }
-    public String getPredictionStatus() { return predictionStatus; }
+    // Métodos para asignar y obtener arreglos completos
+    public double[] getNotasBimestre1() { return notasBimestre1; }
+    public void setNotasBimestre1(double[] notas) { this.notasBimestre1 = notas; }
 
-    /**
-     * Modifica las notas blindando el sistema contra datos inválidos.
-     * Aquí nacerá el manejo de excepciones personalizado.
-     */
-    /**
-     * Modifica las notas blindando el sistema contra datos inválidos mediante excepciones personalizadas.
-     */
-    public void updateGrades(double c1, double c2) throws NotaInvalidaException {
-        if (c1 < 0 || c1 > 10) {
-            throw new NotaInvalidaException(c1);
-        }
-        if (c2 < 0 || c2 > 10) {
-            throw new NotaInvalidaException(c2);
-        }
+    public double[] getNotasBimestre2() { return notasBimestre2; }
+    public void setNotasBimestre2(double[] notas) { this.notasBimestre2 = notas; }
 
-        this.component1 = c1;
-        this.component2 = c2;
-
-        // Uso del polimorfismo en tiempo de ejecución:
-        this.finalGrade = this.course.calculateFinalGrade(c1, c2);
+    // 🔑 Método centralizado para actualizar los 10 aportes de golpe desde la persistencia
+    public void updateBimestralGrades(double[] b1, double[] b2) {
+        if (b1.length == 5) System.arraycopy(b1, 0, this.notasBimestre1, 0, 5);
+        if (b2.length == 5) System.arraycopy(b2, 0, this.notasBimestre2, 0, 5);
     }
 
-    public void setPredictionStatus(String status) {
-        this.predictionStatus = status;
+    // Calcula la nota total del Bimestre 1 sumando sus 5 aportes
+    public double getComponent1() {
+        double sum = 0;
+        for (double n : notasBimestre1) sum += n;
+        return sum;
+    }
+
+    // Calcula la nota total del Bimestre 2 sumando sus 5 aportes
+    public double getComponent2() {
+        double sum = 0;
+        for (double n : notasBimestre2) sum += n;
+        return sum;
     }
 }

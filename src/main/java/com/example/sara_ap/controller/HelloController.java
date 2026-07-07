@@ -1,4 +1,6 @@
 package com.example.sara_ap.controller;
+
+import javafx.stage.Window;
 import javafx.scene.control.Alert;
 import com.example.sara_ap.HelloApplication;
 import com.example.sara_ap.domain.Student;
@@ -46,68 +48,80 @@ public class HelloController {
     @FXML
     protected void onVolverClick() {
         rolSeleccionado = ""; // Reinicia el rol seleccionado
-        cambiarPantalla("/com/example/sara_ap/hello-view.fxml"); // Nos regresa volando a la pantalla de perfiles
+        cambiarPantalla("/com/example/sara_ap/hello-view.fxml"); // Nos regresa a la pantalla de perfiles
     }
 
-    // 🔓 Botón "Iniciar Sesión" (Valida las claves según el rol elegido)
     // 🔓 Botón "Iniciar Sesión" (Valida las claves según el rol elegido)
     @FXML
     protected void onAutenticarClick() {
-        String emailInput = txtEmail.getText().trim();
-        String passwordInput = txtPassword.getText().trim();
+        try {
+            String emailInput = txtEmail.getText().trim();
+            String passwordInput = txtPassword.getText().trim();
 
-        if (emailInput.isEmpty() || passwordInput.isEmpty()) {
-            mostrarAlerta("Campos Vacíos", "Por favor, llene todos los campos del formulario.", Alert.AlertType.WARNING);
-            return;
-        }
+            if (emailInput.isEmpty() || passwordInput.isEmpty()) {
+                mostrarAlerta("Campos Vacíos", "Por favor, llene todos los campos obligatorios.", Alert.AlertType.WARNING);
+                return;
+            }
 
-        if (rolSeleccionado.equals("PROFESOR")) {
-            List<Professor> profesores = persistencia.loadProfessors();
-            for (Professor p : profesores) {
-                if (p.getEmail().trim().equalsIgnoreCase(emailInput) && p.getPassword().equals(passwordInput)) {
-                    try {
-                        Stage stage = (Stage) txtEmail.getScene().getWindow();
-                        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/com/example/sara_ap/teacher-view.fxml"));
-                        Scene scene = new Scene(loader.load(), 650, 500);
+            if (rolSeleccionado.equals("PROFESOR")) {
+                List<Professor> profesores = persistencia.loadProfessors();
+                for (Professor p : profesores) {
+                    // 🔑 Sanitización para evitar desfasados por retornos de carro (\r) en el CSV
+                    String csvEmail = p.getEmail() != null ? p.getEmail().replaceAll("[\\r\\n]", "").trim() : "";
+                    String csvPassword = p.getPassword() != null ? p.getPassword().replaceAll("[\\r\\n]", "").trim() : "";
 
-                        TeacherController controller = loader.getController();
-                        controller.initData(p);
+                    if (csvEmail.equalsIgnoreCase(emailInput) && csvPassword.equals(passwordInput)) {
+                        try {
+                            Stage stage = (Stage) txtEmail.getScene().getWindow();
+                            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/com/example/sara_ap/teacher-view.fxml"));
+                            Scene scene = new Scene(loader.load());
 
-                        stage.setScene(scene);
-                        stage.centerOnScreen();
-                    } catch (IOException e) {
-                        System.err.println("Error al cargar el panel del profesor: " + e.getMessage());
-                        e.printStackTrace();
+                            // Pasamos el profesor autenticado para llenar el ComboBox por ID textual
+                            TeacherController controller = loader.getController();
+                            controller.initData(p);
+
+                            stage.setScene(scene);
+                            stage.centerOnScreen();
+                        } catch (IOException e) {
+                            mostrarAlerta("Error de Interfaz", "Fallo al cargar el FXML del Profesor: " + e.getMessage(), Alert.AlertType.ERROR);
+                            e.printStackTrace();
+                        }
+                        return;
                     }
-                    return;
+                }
+            } else if (rolSeleccionado.equals("ESTUDIANTE")) {
+                List<Student> estudiantes = persistencia.loadFullSystemData(cursosDisponibles);
+                for (Student s : estudiantes) {
+                    // 🔑 Sanitización homóloga para el módulo de estudiantes
+                    String csvEmail = s.getEmail() != null ? s.getEmail().replaceAll("[\\r\\n]", "").trim() : "";
+                    String csvPassword = s.getPassword() != null ? s.getPassword().replaceAll("[\\r\\n]", "").trim() : "";
+
+                    if (csvEmail.equalsIgnoreCase(emailInput) && csvPassword.equals(passwordInput)) {
+                        try {
+                            Stage stage = (Stage) txtEmail.getScene().getWindow();
+                            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/com/example/sara_ap/student-view.fxml"));
+                            Scene scene = new Scene(loader.load());
+
+                            stage.setScene(scene);
+                            stage.setTitle("SARA - Panel del Estudiante");
+                            stage.centerOnScreen();
+                        } catch (IOException e) {
+                            mostrarAlerta("Error de Interfaz", "Fallo al cargar el FXML del Estudiante: " + e.getMessage(), Alert.AlertType.ERROR);
+                            e.printStackTrace();
+                        }
+                        return;
+                    }
                 }
             }
-        } else if (rolSeleccionado.equals("ESTUDIANTE")) {
-            List<Student> estudiantes = persistencia.loadFullSystemData(cursosDisponibles);
-            for (Student s : estudiantes) {
-                if (s.getEmail().trim().equalsIgnoreCase(emailInput) && s.getPassword().equals(passwordInput)) {
-                    try {
-                        Stage stage = (Stage) txtEmail.getScene().getWindow();
-                        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/com/example/sara_ap/student-view.fxml"));
-                        Scene scene = new Scene(loader.load(), 650, 500);
 
-                        stage.setScene(scene);
-                        stage.setTitle("SARA - Panel del Estudiante");
-                        stage.centerOnScreen();
-                    } catch (IOException e) {
-                        System.err.println("Error al cargar el panel del estudiante: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                    return;
-                }
-            }
+            mostrarAlerta("Acceso Denegado", "El correo electrónico o la contraseña son incorrectos.", Alert.AlertType.ERROR);
+
+        } catch (Exception ex) {
+            mostrarAlerta("Error Crítico", ex.toString(), Alert.AlertType.ERROR);
+            ex.printStackTrace();
         }
-
-        // ❌ Si el bucle termina y no retornó, las credenciales están mal: ¡Mostramos la alerta visual!
-        mostrarAlerta("Error de Autenticación", "El correo electrónico o la contraseña son incorrectos para el perfil " + rolSeleccionado.toLowerCase() + ".", Alert.AlertType.ERROR);
     }
 
-    // 🔥 Método auxiliar para crear alertas visuales rápidamente
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -116,17 +130,14 @@ public class HelloController {
         alerta.showAndWait();
     }
 
-    // 🔄 Método utilitario para alternar los diseños FXML dentro de la misma ventana
-    // 🔄 Método utilitario adaptado para respetar el tamaño responsivo de cada FXML
     private void cambiarPantalla(String fxmlFile) {
         try {
-            Stage stage = (Stage) Stage.getWindows().filtered(w -> w.isShowing()).get(0);
+            Stage stage = (Stage) Stage.getWindows().filtered(Window::isShowing).get(0);
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxmlFile));
 
-            // Al no quemar los números de ancho y alto aquí, se adapta al diseño original del FXML
             Scene newScene = new Scene(fxmlLoader.load());
             stage.setScene(newScene);
-            stage.centerOnScreen(); // Mantiene la ventana bien centrada al cambiar de tamaño
+            stage.centerOnScreen();
         } catch (IOException e) {
             System.err.println("Error al cambiar a la pantalla " + fxmlFile + ": " + e.getMessage());
         }
