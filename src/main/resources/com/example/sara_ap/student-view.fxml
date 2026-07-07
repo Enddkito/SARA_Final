@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/17"
-            fx:controller="com.example.sara_ap.controller.StudentController"
-            prefWidth="650.0" prefHeight="500.0"
-            style="-fx-background-color: #F8FAFC;">
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.example.sara_ap.controller.StudentController"
+      spacing="15.0"
+      style="-fx-background-color: #F8FAFC;"
+      prefWidth="700.0" prefHeight="500.0">
 
-    <Label fx:id="lblBienvenidaEstudiante" text="Panel del Estudiante" layoutX="30.0" layoutY="25.0"
-           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" />
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
+    </padding>
 
-    <Label text="Tu Reporte de Calificaciones Actuales:" layoutX="30.0" layoutY="75.0"
-           style="-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 14px;" />
+    <VBox spacing="5.0">
+        <Label fx:id="lblBienvenidaEstudiante" text="Panel del Estudiante"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" />
+        <Label text="Tu Reporte de Calificaciones Actuales:"
+               style="-fx-font-weight: bold; -fx-text-fill: #334155; -fx-font-size: 14px;" />
+    </VBox>
 
-    <TableView fx:id="tblNotasEstudiante" layoutX="30.0" layoutY="110.0" prefWidth="590.0" prefHeight="315.0"
-               style="-fx-background-radius: 6; -fx-border-radius: 6;">
+    <TableView fx:id="tblNotasEstudiante" VBox.vgrow="ALWAYS"
+               style="-fx-background-radius: 6; -fx-border-radius: 6; -fx-background-color: white;">
         <columns>
-            <TableColumn fx:id="colMateria" text="Materia / Curso" prefWidth="250.0" />
-            <TableColumn fx:id="colNota" text="Nota Obtenida" prefWidth="150.0" />
-            <TableColumn fx:id="colEstado" text="Estado" prefWidth="188.0" />
+            <TableColumn fx:id="colMateria" text="Materia / Curso" prefWidth="280.0" />
+            <TableColumn fx:id="colNota" text="Nota Obtenida" prefWidth="160.0" />
+            <TableColumn fx:id="colEstado" text="Estado" prefWidth="230.0" />
         </columns>
     </TableView>
 
-    <Button text="Cerrar Sesión" layoutX="520.0" layoutY="445.0" onAction="#onLogoutClick"
-            style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"
-            prefWidth="100.0" prefHeight="35.0" />
+    <HBox alignment="CENTER_RIGHT" spacing="10.0">
+        <Button text="Cerrar Sesión" onAction="#onLogoutClick"
+                style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;"
+                prefWidth="130.0" prefHeight="38.0" />
+    </HBox>
 
-</AnchorPane>
+</VBox>
