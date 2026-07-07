@@ -107,6 +107,8 @@ public class HelloController {
         mostrarAlerta("Error de Autenticación", "El correo electrónico o la contraseña son incorrectos para el perfil " + rolSeleccionado.toLowerCase() + ".", Alert.AlertType.ERROR);
     }
 
+
+
     // 🔥 Método auxiliar para crear alertas visuales rápidamente
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
@@ -126,5 +128,7 @@ public class HelloController {
         } catch (IOException e) {
             System.err.println("Error al cambiar a la pantalla " + fxmlFile + ": " + e.getMessage());
         }
+
     }
+
 }
