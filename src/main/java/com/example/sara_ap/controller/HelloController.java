@@ -122,6 +122,7 @@ public class HelloController {
         }
     }
 
+
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
@@ -141,5 +142,7 @@ public class HelloController {
         } catch (IOException e) {
             System.err.println("Error al cambiar a la pantalla " + fxmlFile + ": " + e.getMessage());
         }
+
     }
+
 }
