@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.TeacherController">
+<AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.TeacherController">
     <children>
-        <Label fx:id="lblBienvenida" layoutX="49.0" layoutY="38.0" prefHeight="27.0" prefWidth="443.0" text="👨‍🏫 Panel Docente" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Label fx:id="lblBienvenida" layoutX="49.0" layoutY="38.0" prefHeight="27.0" prefWidth="443.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="👨‍🏫 Panel Docente" />
 
         <ComboBox fx:id="cmbCursos" layoutX="49.0" layoutY="85.0" onAction="#onCursoSeleccionado" prefWidth="250.0" promptText="Seleccione un curso..." />
 
@@ -22,17 +23,17 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="tblNotasB1" prefHeight="315.0" prefWidth="850.0">
+                                <TableView fx:id="tblNotasB1" editable="true" prefHeight="315.0" prefWidth="850.0">
                                     <columns>
                                         <TableColumn fx:id="colIdB1" prefWidth="90.0" text="Cédula" />
-                                        <TableColumn fx:id="colNombreB1" prefWidth="180.0" text="Estudiante" />
-                                        <TableColumn fx:id="colPVirtualB1" prefWidth="80.0" text="P. Virtual" />
-                                        <TableColumn fx:id="colPPresencialB1" prefWidth="90.0" text="P. Presencial" />
-                                        <TableColumn fx:id="colExamenB1" prefWidth="80.0" text="Examen" />
-                                        <TableColumn fx:id="colTalleresB1" prefWidth="80.0" text="Talleres" />
-                                        <TableColumn fx:id="colDeberesB1" prefWidth="80.0" text="Deberes" />
+                                        <TableColumn fx:id="colNombreB1" prefWidth="150.0" text="Estudiante" />
+                                        <TableColumn fx:id="colPVirtualB1" prefWidth="105.0" text="P. Virtual (10%)" />
+                                        <TableColumn fx:id="colPPresencialB1" prefWidth="115.0" text="P. Presencial (20%)" />
+                                        <TableColumn fx:id="colExamenB1" prefWidth="100.0" text="Examen (30%)" />
+                                        <TableColumn fx:id="colTalleresB1" prefWidth="100.0" text="Talleres (20%)" />
+                                        <TableColumn fx:id="colDeberesB1" prefWidth="100.0" text="Deberes (20%)" />
                                         <TableColumn fx:id="colNotaB1" prefWidth="85.0" text="Total B1" />
-                                        <TableColumn fx:id="colEstadoB1" prefWidth="85.0" text="Estado" />
+                                        <TableColumn fx:id="colEstadoB1" prefWidth="120.0" text="Estado" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -44,17 +45,17 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <TableView fx:id="tblNotasB2" prefHeight="315.0" prefWidth="850.0">
+                                <TableView fx:id="tblNotasB2" editable="true" prefHeight="315.0" prefWidth="850.0">
                                     <columns>
                                         <TableColumn fx:id="colIdB2" prefWidth="90.0" text="Cédula" />
-                                        <TableColumn fx:id="colNombreB2" prefWidth="180.0" text="Estudiante" />
-                                        <TableColumn fx:id="colPVirtualB2" prefWidth="80.0" text="P. Virtual" />
-                                        <TableColumn fx:id="colPPresencialB2" prefWidth="90.0" text="P. Presencial" />
-                                        <TableColumn fx:id="colExamenB2" prefWidth="80.0" text="Examen" />
-                                        <TableColumn fx:id="colTalleresB2" prefWidth="80.0" text="Talleres" />
-                                        <TableColumn fx:id="colDeberesB2" prefWidth="80.0" text="Deberes" />
+                                        <TableColumn fx:id="colNombreB2" prefWidth="150.0" text="Estudiante" />
+                                        <TableColumn fx:id="colPVirtualB2" prefWidth="105.0" text="P. Virtual (10%)" />
+                                        <TableColumn fx:id="colPPresencialB2" prefWidth="115.0" text="P. Presencial (20%)" />
+                                        <TableColumn fx:id="colExamenB2" prefWidth="100.0" text="Examen (30%)" />
+                                        <TableColumn fx:id="colTalleresB2" prefWidth="100.0" text="Talleres (20%)" />
+                                        <TableColumn fx:id="colDeberesB2" prefWidth="100.0" text="Deberes (20%)" />
                                         <TableColumn fx:id="colNotaB2" prefWidth="85.0" text="Total B2" />
-                                        <TableColumn fx:id="colEstadoB2" prefWidth="85.0" text="Estado" />
+                                        <TableColumn fx:id="colEstadoB2" prefWidth="120.0" text="Estado" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -62,11 +63,32 @@
                     </content>
                 </Tab>
 
+                <Tab text="🎓 Promedios Finales Semestrales">
+                    <content>
+                        <VBox spacing="10" style="-fx-padding: 15;">
+                            <children>
+                                <TableView fx:id="tblPromediosFinales" prefHeight="285.0" prefWidth="820.0">
+                                    <columns>
+                                        <TableColumn fx:id="colFinalId" prefWidth="100.0" text="Cédula" />
+                                        <TableColumn fx:id="colFinalNombre" prefWidth="180.0" text="Estudiante" />
+                                        <TableColumn fx:id="colFinalB1" prefWidth="130.0" style="-fx-alignment: CENTER;" text="Nota B1 (Sobre 20)" />
+                                        <TableColumn fx:id="colFinalB2" prefWidth="130.0" style="-fx-alignment: CENTER;" text="Nota B2 (Sobre 20)" />
+                                        <TableColumn fx:id="colFinalNotaSemestre" prefWidth="150.0" style="-fx-alignment: CENTER; -fx-font-weight: bold;" text="Promedio Semestral" />
+                                        <TableColumn fx:id="colFinalEstado" prefWidth="140.0" style="-fx-alignment: CENTER;" text="Estado Definitivo" />
+                                    </columns>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
             </tabs>
         </TabPane>
 
-        <Label fx:id="lblAlertaDesviacion" layoutX="49.0" layoutY="500.0" prefHeight="40.0" prefWidth="850.0" text="Seleccione un curso para calcular el rendimiento." wrapText="true" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
-
-        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" text="Cerrar Sesión" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Label fx:id="lblAlertaDesviacion" layoutX="49.0" layoutY="500.0" prefHeight="40.0" prefWidth="850.0" style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Seleccione un curso para calcular el rendimiento." wrapText="true" />
+        <Button layoutX="49.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLoadCSV" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold;" text="📂 Cargar CSV" />
+        <Button layoutX="195.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleSaveChanges" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold;" text="💾 Guardar Cambios" />
+        <Button layoutX="350.0" layoutY="560.0" mnemonicParsing="false" onAction="#onExportPDFClick" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #8B5CF6; -fx-text-fill: white; -fx-font-weight: bold;" text="📄 Exportar PDF" />
+        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold;" text="🚪 Cerrar Sesión" />
     </children>
 </AnchorPane>
