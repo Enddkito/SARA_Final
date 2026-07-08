@@ -333,4 +333,20 @@ public class CSVDataPersistence {
         loadGradesIntoStudents(students, outAvailableCourses);
         return students;
     }
+
+    /**
+     * Sobrescribe un archivo CSV con una lista de líneas actualizadas.
+     * @param filePath Ruta del archivo .csv donde se guardarán los datos.
+     * @param lines Lista de cadenas de texto formateadas con comas (ej: "1755555555,Alejandro,10.0,9.5").
+     */
+    public static void saveToCSV(String filePath, List<String> lines) throws java.io.IOException {
+        // Usamos BufferedWriter y FileWriter. Al NO ponerle 'true' al FileWriter,
+        // le decimos a Java que limpie el archivo y escriba los nuevos datos desde cero.
+        try (java.io.BufferedWriter bw = new java.io.BufferedWriter(new java.io.FileWriter(filePath))) {
+            for (String line : lines) {
+                bw.write(line);
+                bw.newLine(); // Esto maneja el salto de línea correcto según el sistema operativo (\n o \r\n)
+            }
+        }
+    }
 }

@@ -30,12 +30,12 @@ public class Enrollment {
     public double[] getNotasBimestre2() { return notasBimestre2; }
     public void setNotasBimestre2(double[] notas) { this.notasBimestre2 = notas; }
 
-    // 🔑 Método centralizado para actualizar los 10 aportes de golpe desde la persistencia
-    public void updateBimestralGrades(double[] b1, double[] b2) {
-        if (b1.length == 5) System.arraycopy(b1, 0, this.notasBimestre1, 0, 5);
-        if (b2.length == 5) System.arraycopy(b2, 0, this.notasBimestre2, 0, 5);
-    }
+// 🔑 Método centralizado para actualizar los 10 aportes de golpe desde la persistencia
+    public void updateBimestralGrades(double[] notasB1, double[] notasB2) {
+        this.notasBimestre1 = notasB1;
+        this.notasBimestre2 = notasB2;
 
+    }
     // Calcula la nota total del Bimestre 1 sumando sus 5 aportes
     public double getComponent1() {
         double sum = 0;
