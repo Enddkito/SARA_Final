@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.TeacherController">
@@ -18,7 +19,6 @@
 
         <TabPane layoutX="49.0" layoutY="134.0" prefHeight="350.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-
                 <Tab text="Primer Bimestre">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -82,13 +82,41 @@
                     </content>
                 </Tab>
 
+                <Tab text="Control de Tutorías">
+                    <content>
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <children>
+                                <Label text="📥 Solicitudes de Tutorías de Emergencia Recibidas" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1e293b;" />
+
+                                <TableView fx:id="tblTutoriasProfesor" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colProfEstudiante" prefWidth="200" text="Estudiante" />
+                                        <TableColumn fx:id="colProfMateria" prefWidth="220" text="Asignatura" />
+                                        <TableColumn fx:id="colProfFecha" prefWidth="120" text="Fecha Solicitada" />
+                                        <TableColumn fx:id="colProfHorario" prefWidth="220" text="Bloque Horario" />
+                                        <TableColumn fx:id="colProfEstado" prefWidth="120" text="Estado" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                </TableView>
+
+                                <HBox alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button mnemonicParsing="false" onAction="#handleLimpiarTutoria" style="-fx-background-color: #0284c7; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 5; -fx-cursor: hand;" text="✓ Concluir y Limpiar Tutoría" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
 
         <Label fx:id="lblAlertaDesviacion" layoutX="49.0" layoutY="500.0" prefHeight="40.0" prefWidth="850.0" style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Seleccione un curso para calcular el rendimiento." wrapText="true" />
-        <Button layoutX="49.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLoadCSV" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold;" text="📂 Cargar CSV" />
-        <Button layoutX="195.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleSaveChanges" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold;" text="💾 Guardar Cambios" />
-        <Button layoutX="350.0" layoutY="560.0" mnemonicParsing="false" onAction="#onExportPDFClick" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #8B5CF6; -fx-text-fill: white; -fx-font-weight: bold;" text="📄 Exportar PDF" />
-        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold;" text="🚪 Cerrar Sesión" />
+        <Button layoutX="49.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLoadCSV" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📂 Cargar CSV" />
+        <Button layoutX="195.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleSaveChanges" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="💾 Guardar Cambios" />
+        <Button layoutX="350.0" layoutY="560.0" mnemonicParsing="false" onAction="#onExportPDFClick" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #8B5CF6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📄 Exportar PDF" />
+        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="🚪 Cerrar Sesión" />
     </children>
 </AnchorPane>
