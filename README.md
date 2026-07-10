@@ -3,10 +3,11 @@
 <p align="center">
   <img src="SARA_Banner.png" alt="SARA Banner" width="100%">
 </p>
+
 [![Build](https://img.shields.io/github/actions/workflow/status/Enddkito/SARA_Final/ci.yml?branch=main&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/actions)
 [![License](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/blob/main/LICENSE)
-[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)]()
-[![JavaFX](https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=javafx)]()
+[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)](https://github.com/Enddkito/SARA_Final)
+[![JavaFX](https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=javafx)](https://github.com/Enddkito/SARA_Final)
 [![Last commit](https://img.shields.io/github/last-commit/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/commits)
 
 SARA es una aplicación de escritorio modular diseñada para centralizar, procesar y proyectar de manera analítica métricas de rendimiento estudiantil y docente. Provee una interfaz gráfica avanzada e intuitiva que permite el seguimiento en tiempo real del desempeño de asignaturas, la gestión interactiva de calificaciones y el agendamiento formal de tutorías académicas de rescate.
