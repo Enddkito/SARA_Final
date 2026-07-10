@@ -1,127 +1,97 @@
-# SARA
+# SARA - Sistema de Análisis de Rendimiento Académico
 
 <p align="center">
-  <img src="SARA_Banner.png" alt="SARA Banner" width="100%">
+  <img src="src/main/resources/SARA_Banner.png" alt="SARA Banner" width="100%">
 </p>
 
 [![Build](https://img.shields.io/github/actions/workflow/status/Enddkito/SARA_Final/ci.yml?branch=main&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/actions)
 [![License](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/blob/main/LICENSE)
 [![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)]()
-[![Issues](https://img.shields.io/github/issues/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/issues)
+[![JavaFX](https://img.shields.io/badge/JavaFX-21-blue?style=for-the-badge&logo=javafx)]()
 [![Last commit](https://img.shields.io/github/last-commit/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/commits)
-[![Contributors](https://img.shields.io/github/contributors/Enddkito/SARA_Final?style=for-the-badge)](https://github.com/Enddkito/SARA_Final/graphs/contributors)
 
-SARA es una aplicación backend + escritorio para centralizar, procesar y analizar métricas de rendimiento estudiantil y docente. Provee una interfaz gráfica (Java Swing) para la gestión de usua[...]
+SARA es una aplicación de escritorio modular diseñada para centralizar, procesar y proyectar de manera analítica métricas de rendimiento estudiantil y docente. Provee una interfaz gráfica avanzada e intuitiva que permite el seguimiento en tiempo real del desempeño de asignaturas, la gestión interactiva de calificaciones y el agendamiento formal de tutorías académicas de rescate.
 
-## Tabla de contenidos
-- [Características](#características)
-- [Tecnologías](#tecnologías)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Ejecución](#ejecución)
-- [Formato de datos (CSV)](#formato-de-datos-csv)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Desarrollo y pruebas](#desarrollo-y-pruebas)
-- [Buenas prácticas y mejoras sugeridas](#buenas-prácticas-y-mejoras-sugeridas)
-- [Contribuir](#contribuir)
-- [Licencia](#licencia)
-- [Contacto](#contacto)
+## 📌 Tabla de Contenidos
+- [Características del Sistema](#-características-del-sistema)
+- [Cumplimiento de Requerimientos Académicos](#-cumplimiento-de-requerimientos-académicos)
+- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Formato de Persistencia de Datos (CSV)](#-formato-de-persistencia-de-datos-csv)
+- [Arquitectura y Diagrama UML](#-arquitectura-y-diagrama-uml)
+- [Instalación y Ejecución](#-instalación-y-ejecución)
+- [Licencia](#-licencia)
 
-## Características
-- Interfaz gráfica de usuario desarrollada con Java Swing.
-- Gestión de credenciales y notas utilizando CSV para persistencia.
-- Módulos para procesar y analizar métricas académicas.
-- Exportación/importación de datos en CSV.
-- Sistema modular pensado para añadir nuevas métricas e integraciones.
+---
 
-## Tecnologías
-| Tecnología | Uso en el proyecto | Notas |
-|---|---|---|
-| Java SE | Lógica de negocio, controladores y arquitectura orientada a objetos (POO) | Java |
-| Java Swing | Construcción de la interfaz gráfica de usuario (GUI) | Swing |
-| IntelliJ IDEA | Entorno de desarrollo integrado y depuración de código | IntelliJ IDEA |
-| Git & GitHub | Control de versiones distribuido y gestión de ramas | Git |
-| Archivos CSV | Persistencia ligera para credenciales, notas y export/import de datos | CSV |
+## 🚀 Características del Sistema
 
-## Requisitos
-- Java Development Kit (JDK) instalado. Recomendado: Java 17 (o la versión que uses en tu entorno).
-- IDE recomendado: IntelliJ IDEA u otro IDE Java.
-- Herramienta de construcción: actualmente no se detecta pom.xml ni build.gradle en la raíz; las instrucciones siguientes usan comandos genéricos de Java. Si quieres que añada un build con Mav[...]
+*   **Panel del Docente:** Permite la carga interactiva de aportes estructurados por bimestres (Pruebas virtuales, presenciales, exámenes, talleres y deberes) con guardado directo en caliente hacia los ficheros del sistema.
+*   **Panel del Estudiante Dinámico:** El entorno adapta de forma genérica las asignaturas y matrículas del estudiante autenticado sin depender de datos quemados o estáticos.
+*   **Laboratorio Simulador de Notas Independiente:** Una sección aislada del controlador principal que opera únicamente en la memoria RAM del sistema. Permite al estudiante proyectar sus promedios bimestrales antes de que el docente asiente las notas en el registro físico.
+*   **Asistente Predictivo Académico:** Motor analítico que evalúa las notas acumuladas sobre 20 y 40 puntos para arrojar alertas automatizadas de tutorías o estados condicionales de supletorios.
+*   **Gestión de Tutorías:** Módulo integrado para la calendarización, procesamiento y exportación automatizada de reportes de acompañamiento pedagógico.
 
-## Instalación
-1. Clona el repositorio:
-   git clone https://github.com/Enddkito/SARA_Final.git
-2. Entra al directorio del proyecto:
-   cd SARA_Final
-3. Opciones de compilación:
-   - Si usas un IDE como IntelliJ, importa el proyecto y compila desde el IDE.
-   - Compilación manual (ejemplo simple):
-     - Compila los archivos .java:
-       mkdir -p out && javac -d out $(find src -name "*.java")
-     - Empaqueta en JAR (si tienes una clase Main con el entry point, sustituir "com.tu.Main"):
-       jar --create --file SARA.jar -C out .
+---
 
-> Nota: Si prefieres que agregue soporte con Maven o Gradle (pom.xml o build.gradle) para facilitar build y dependencias, indícalo y lo añado.
+## 🎓 Cumplimiento de Requerimientos Académicos
 
-## Ejecución
-- Ejecutar JAR construido:
-  java -jar SARA.jar
-- O ejecutar desde el IDE: ejecutar la clase que contiene el método `public static void main(String[] args)` (p. ej. `com.tu.organizacion.Main`).
+### 1. Interfaces Gráficas de Usuario (GUI)
+El frontend de SARA está completamente implementado utilizando **JavaFX** y estructurado mediante archivos **FXML**, separando de forma estricta el diseño visual de la lógica de control. Emplea componentes reactivos avanzados como `TableView`, `TabPane`, `ComboBox` y controles estadísticos dinámicos (`BarChart` y `LineChart`) para el renderizado elástico de tendencias de rendimiento.
 
-## Formato de datos (CSV)
-Explica aquí los CSV usados por el sistema para credenciales, notas y otros. Ejemplo de CSV para usuarios:
+### 2. Persistencia de Datos
+La persistencia de datos se realiza a través de la gestión de ficheros planos en formato **CSV** procesados por la capa de infraestructura. La carga y escritura de flujos se ejecuta en caliente y en tiempo real, sincronizando los cambios de notas del docente con el panel del estudiante de inmediato.
 
-usuarios.csv
-id,nombre,email,rol,password_hash
-1,María Pérez,maria@example.com,estudiante,hash-abc123
-2,Juan Gómez,juan@example.com,docente,hash-def456
+### 3. Programación Orientada a Objetos (POO) y Pilares
+El diseño de la aplicación se rige bajo los pilares fundamentales de la POO:
+*   **Encapsulamiento:** Clases de dominio (`Student`, `Professor`, `Course`, `Enrollment`) con atributos privados accesibles de manera controlada mediante métodos *getters* y *setters* y propiedades elásticas de JavaFX (`StringProperty`).
+*   **Abstracción:** Modelado de entidades del mundo real universitario adaptadas a tipos de datos complejos y colecciones genéricas de objetos (`List<Course>`, `ObservableList`).
+*   **Polimorfismo / Modularidad:** Separación limpia de la arquitectura en capas independientes de Controladores, Dominio, Servicios Lógicos e Infraestructura de datos.
 
-Ejemplo de CSV para notas:
+### 4. Validaciones y Manejo de Excepciones
+El sistema está blindado contra fallos en tiempo de ejecución (`Runtime Exceptions`) e inconsistencias de datos:
+*   **Sanitización de Datos:** Limpieza activa de caracteres residuales de retorno de carro (`\r\n`) en la lectura de archivos CSV para prevenir errores de desfasado en las claves o correos.
+*   **Manejo de Errores Numéricos:** Bloques `try-catch` especializados para capturar fallos de formato (`NumberFormatException`) si se ingresan valores inválidos o vacíos durante la edición de notas.
+*   **Gestión de I/O:** Captura segura de excepciones de entrada/salida (`IOException`) en la navegación de escenas y flujos de login.
 
-notas.csv
-estudiante_id,curso,actividad,nota,fecha
-1,Matemáticas,Parcial 1,85,2026-05-10
+---
 
-Recomendaciones:
-- Usar UTF-8 como encoding.
-- Evitar comas en campos; en caso necesario, encerrar en comillas.
-- Validar que los IDs sean únicos y las notas estén en un rango esperado.
+## 🛠️ Tecnologías Utilizadas
 
-## Estructura del proyecto (ejemplo)
-- src/
-  - main/
-    - java/  — código fuente
-    - resources/ — recursos (imágenes, plantillas)
-  - test/
-- data/ — CSVs de ejemplo
-- scripts/ — scripts útiles (ej.: empaquetado, generación de datos)
-- README.md
-- LICENSE
+| Tecnología | Uso en el Proyecto |
+|---|---|
+| **Java SE 17** | Lógica de negocio, controladores y arquitectura orientada a objetos. |
+| **JavaFX 21 / FXML** | Construcción de la interfaz gráfica adaptativa y cartas estadísticas. |
+| **IntelliJ IDEA** | Entorno de desarrollo integrado (IDE) utilizado para la depuración y construcción. |
+| **Git & GitHub** | Control de versiones distribuido y gestión de ramas integradas de trabajo. |
+| **Archivos CSV** | Motor de persistencia para credenciales de acceso, asignaturas y registros de notas. |
 
-Ajusta según la estructura real del repo.
+---
 
-## Desarrollo y pruebas
-- Ejecutar pruebas unitarias (si se añaden): `mvn test` o `./gradlew test` según la herramienta de build.
-- Recomendación: añadir tests unitarios y un conjunto de datos de ejemplo para pruebas manuales.
+## 📂 Estructura del Proyecto
 
-## Buenas prácticas y mejoras sugeridas
-- Añadir un archivo `CONTRIBUTING.md` y `CODE_OF_CONDUCT.md` para facilitar contribuciones.
-- Añadir GitHub Actions para build y tests, y exponer un badge en el README.
-- Empaquetar una versión distribuible (un único JAR ejecutable).
-- Agregar screenshots o un GIF corto en la sección de Uso para mostrar la UI.
-- Documentar casos de uso y ejemplos de reportes generados.
-
-## Contribuir
-Gracias por tu interés en contribuir. Un flujo sugerido:
-1. Haz fork del repo.
-2. Crea una branch con un nombre descriptivo: `feature/nueva-funcionalidad` o `fix/correccion`.
-3. Realiza commits pequeños y con mensajes claros (ej.: `feat: añadir export CSV` o `fix: corregir validación de notas`).
-4. Abre un Pull Request describiendo el objetivo del cambio, pruebas realizadas y cualquier impacto.
-
-Cuando envíes un PR, incluye pruebas o pasos para replicar manualmente los cambios.
-
-## Licencia
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
-
-## Contacto
-Autor: Enddkito (GitHub: @Enddkito)
+```text
+src/
+└── main/
+    ├── java/
+    │   └── com/example/sara_ap/
+    │       ├── HelloApplication.java      # Punto de entrada de la aplicación (JavaFX)
+    │       ├── controller/                # Capa de Controladores de las Vistas FXML
+    │       │   ├── HelloController.java   # Controlador del Login y autenticación por roles
+    │       │   ├── StudentController.java # Controlador del entorno del alumno y gráficos
+    │       │   └── TeacherController.java # Controlador del entorno del docente
+    │       ├── domain/                    # Capa de Entidades del Dominio (POO)
+    │       │   ├── Course.java
+    │       │   ├── Enrollment.java
+    │       │   ├── Professor.java
+    │       │   └── Student.java
+    │       └── services/                  # Capa de Lógica de Negocio y Servicios
+    │           ├── PredictiveService.java # Motor de predicciones académicas
+    │           ├── SimulationService.java # Motor independiente para el simulador en RAM
+    │           └── TutoriaDocumentService.java
+    └── resources/                         # Recursos de Configuración e Interfaces
+        └── com/example/sara_ap/
+            ├── hello-view.fxml            # FXML de la Pantalla de bienvenida
+            ├── login-view.fxml            # FXML del Formulario de autenticación
+            ├── student-view.fxml          # FXML del Panel del Estudiante y Simulador
+            └── teacher-view.fxml          # FXML del Panel de gestión del Docente
