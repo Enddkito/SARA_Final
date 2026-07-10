@@ -1,9 +1,8 @@
 # SARA - Sistema de Análisis de Rendimiento Académico
 
 <p align="center">
-  <img src="src/main/resources/SARA_Banner.png" alt="SARA Banner" width="100%">
+  <img src="SARA_Banner.png" alt="SARA Banner" width="100%">
 </p>
-
 [![Build](https://img.shields.io/github/actions/workflow/status/Enddkito/SARA_Final/ci.yml?branch=main&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/actions)
 [![License](https://img.shields.io/github/license/Enddkito/SARA_Final?color=green&style=for-the-badge)](https://github.com/Enddkito/SARA_Final/blob/main/LICENSE)
 [![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)]()
