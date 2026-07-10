@@ -1,3 +1,4 @@
-1711111111,Ing,Martinez,profesor@epn.edu.ec,profesor123,Sistemas
-1755555555,Alejandro,Larrea,alarrea@epn.edu.ec,clave123,Sistemas
-1744444444,Carmen,Viteri,cviteri@epn.edu.ec,clave456,Física
+id_profesor,nombre,apellido,correo,contrasena,especialidad
+9991111111,Juan,Solis,juan.solis@epn.edu.ec,prof123,Matemáticas Avanzadas
+9992222222,Rosa,Mendoza,rosa.mendoza@epn.edu.ec,prof456,Ciencias de la Computación
+9993333333,Arturo,Jaramillo,arturo.jaramillo@epn.edu.ec,prof789,Física Cuántica
