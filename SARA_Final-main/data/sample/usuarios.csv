@@ -1,0 +1,3 @@
+id,nombre,email,rol,password_hash
+1,María Pérez,maria@example.com,estudiante,hash-abc123
+2,Juan Gómez,juan@example.com,docente,hash-def456

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox alignment="CENTER" prefHeight="450.0" prefWidth="500.0" spacing="25.0" style="-fx-background-color: #F8FAFC;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.HelloController">
+
+    <padding>
+        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+    </padding>
+
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0F172A;" text="Iniciar Sesión" />
+
+    <GridPane alignment="CENTER" hgap="10.0" style="-fx-max-width: 350px;" vgap="15.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" minWidth="90.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+
+        <Label style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Correo:" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <graphic>
+                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@icons/icono_perfil.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <TextField fx:id="txtEmail" prefHeight="35.0" style="-fx-background-radius: 6;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Contraseña:" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <graphic>
+                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@icons/icono_candado.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <PasswordField fx:id="txtPassword" prefHeight="35.0" style="-fx-background-radius: 6;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
+
+    <VBox alignment="CENTER" spacing="10.0" style="-fx-max-width: 350px;" VBox.vgrow="NEVER">
+        <Button maxWidth="1.7976931348623157E308" onAction="#onAutenticarClick" prefHeight="40.0" style="-fx-background-color: #1E40AF; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;" text="Ingresar al Sistema" />
+
+        <Button maxWidth="1.7976931348623157E308" onAction="#onVolverClick" prefHeight="35.0" style="-fx-background-color: transparent; -fx-text-fill: #64748B; -fx-font-weight: bold; -fx-cursor: hand;" text="Volver al Menú">
+            <graphic>
+                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@icons/icono_volver.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </VBox>
+
+</VBox>

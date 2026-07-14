@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="com.example.sara_ap.controller.HelloController"
+      alignment="CENTER"
+      spacing="30.0"
+      style="-fx-background-color: #F1F5F9;"
+      prefWidth="600.0" prefHeight="500.0">
+
+    <padding>
+        <Insets top="40.0" right="40.0" bottom="40.0" left="40.0"/>
+    </padding>
+
+    <VBox alignment="CENTER" spacing="8.0">
+        <Label text="SARA"
+               style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1E3A8A; -fx-letter-spacing: 2px;" />
+        <Label text="Sistema de Análisis de Rendimiento Académico"
+               style="-fx-font-size: 14px; -fx-font-style: italic; -fx-text-fill: #475569;" />
+    </VBox>
+
+    <VBox alignment="CENTER" spacing="15.0" style="-fx-max-width: 400px;" VBox.vgrow="ALWAYS">
+        <Label text="Selecciona tu perfil para ingresar:"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #334155;" />
+
+        <Button text="👨‍🏫 Soy Profesor" onAction="#onProfesorClick" maxWidth="1.7976931348623157E308" prefHeight="50.0"
+                style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+        <Button text="🎓 Soy Estudiante" onAction="#onEstudianteClick" maxWidth="1.7976931348623157E308" prefHeight="50.0"
+                style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;" />
+    </VBox>
+
+</VBox>
