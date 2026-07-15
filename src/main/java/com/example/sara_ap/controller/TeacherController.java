@@ -7,6 +7,7 @@ import com.example.sara_ap.domain.Enrollment;
 import com.example.sara_ap.domain.Course;
 import com.example.sara_ap.infrastructure.CSVDataPersistence;
 import com.example.sara_ap.services.StatisticalAnalyzer;
+import com.example.sara_ap.services.TutoriaDocumentService;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -80,6 +81,7 @@ public class TeacherController {
     @FXML private TableColumn<FilaTutoriaProfesor, String> colProfHorario;
     @FXML private TableColumn<FilaTutoriaProfesor, String> colProfEstado;
     private final ObservableList<FilaTutoriaProfesor> listaTutoriasProfesor = FXCollections.observableArrayList();
+
     @FXML
     private void handleEnviarTutoriaObligatoria(ActionEvent event) {
         // 1. Validar que haya una fila seleccionada en la tabla
@@ -134,37 +136,10 @@ public class TeacherController {
             return;
         }
 
-        // 5. Guardar en el archivo CSV correcto usando la ruta unificada dinámica (.sara_app)
+        // 5. Guardar llamando directamente al servicio unificado
         try {
-            File archivo = new File(TUTORIAS_FILE_PATH);
-
-            // Si la carpeta contenedora (.sara_app) no existe por alguna razón, se crea automáticamente
-            File parentDir = archivo.getParentFile();
-            if (parentDir != null && !parentDir.exists()) {
-                parentDir.mkdirs();
-            }
-
-            boolean esNuevo = !archivo.exists();
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))) {
-                if (esNuevo) {
-                    writer.write("Estudiante,Asignatura,Fecha,Horario,Estado");
-                    writer.newLine();
-                }
-
-                // Estructura exacta: Estudiante,Asignatura,Fecha,Horario,Estado
-                String nuevaLinea = String.format("%s,%s,%s,%s,%s",
-                        estudianteNombre.trim(),
-                        codigoMateria.trim(),
-                        fecha.toString(),
-                        horario,
-                        "Pendiente"
-                );
-
-                writer.write(nuevaLinea);
-                writer.newLine();
-                writer.flush();
-            }
+            // El servicio se encarga de guardar la tutoría en la ruta dinámica .sara_app
+            tutoriaService.registrarTutoriaObligatoria(estudianteNombre.trim(), codigoMateria.trim(), fecha, horario);
 
             // Alerta informativa de éxito
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -181,10 +156,11 @@ public class TeacherController {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error de Almacenamiento");
             alert.setHeaderText(null);
-            alert.setContentText("No se pudo escribir en el archivo de tutorías: " + e.getMessage());
+            alert.setContentText("No se pudo registrar la tutoría a través del servicio: " + e.getMessage());
             alert.showAndWait();
         }
     }
+
     @FXML
     public void handleLimpiarTutoria(ActionEvent event) {
         // 1. Obtener la fila seleccionada por el profesor
@@ -247,6 +223,7 @@ public class TeacherController {
     private List<Course> cursosDisponibles = new ArrayList<>();
     private List<Student> todosLosEstudiantes = new ArrayList<>();
     private String rutaArchivoActivo = "src/main/resources/grades.csv";
+    private final TutoriaDocumentService tutoriaService = new TutoriaDocumentService();
 
     private final String TUTORIAS_FILE_PATH = System.getProperty("user.home")
             + File.separator + ".sara_app"

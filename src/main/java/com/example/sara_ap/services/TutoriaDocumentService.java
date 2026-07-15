@@ -11,7 +11,9 @@ import java.time.format.DateTimeFormatter;
 public class TutoriaDocumentService {
 
     // Ruta atómica al recurso compartido del sistema
-    private static final String FILE_PATH = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
+    private static final String FILE_PATH = System.getProperty("user.home")
+            + java.io.File.separator + ".sara_app"
+            + java.io.File.separator + "tutoring_appointments.csv";
 
     public void procesarAgendamientoFormal(String estudiante, String asignatura, LocalDate fecha, String horario) {
         if (fecha == null || horario == null || horario.isEmpty()) {
@@ -70,10 +72,9 @@ public class TutoriaDocumentService {
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaFormateada = fecha.format(formatter);
 
-        // Reutilizamos la lógica del archivo dinámico o el PATH_PREFIX que tengas configurado
-        String filePath = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
-
-        // Guardamos con el estado "Obligatoria"
+        String filePath = System.getProperty("user.home")
+                + java.io.File.separator + ".sara_app"
+                + java.io.File.separator + "tutoring_appointments.csv";        // Guardamos con el estado "Obligatoria"
         try (java.io.FileWriter fw = new java.io.FileWriter(filePath, true);
              java.io.PrintWriter pw = new java.io.PrintWriter(fw)) {
 

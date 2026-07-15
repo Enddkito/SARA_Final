@@ -502,7 +502,10 @@ public class StudentController {
         public void setNotaB2(String n) { notaB2Property().set(n); }
     }
     private void verificarTutoriasObligatorias(String estudianteIdActual) {
-        String filePath = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
+        // 🔄 RUTA UNIFICADA AL CANAL COMPARTIDO EN .sara_app DEL DISCO DURO
+        String filePath = System.getProperty("user.home")
+                + File.separator + ".sara_app"
+                + File.separator + "tutoring_appointments.csv";
         File file = new File(filePath);
 
         if (!file.exists()) {
@@ -513,7 +516,8 @@ public class StudentController {
             return;
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");      LocalDate hoy = LocalDate.now();
+        // 📅 FORMATO UNIFICADO dd/MM/yyyy CON TU SERVICIO DE PERSISTENCIA
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");      LocalDate hoy = LocalDate.now();
 
         System.out.println("\n--- 🔍 INICIANDO VERIFICACIÓN DE TUTORÍAS PARA: " + estudianteIdActual + " (Hoy es: " + hoy + ") ---");
 
@@ -537,15 +541,14 @@ public class StudentController {
                     String horario = datos[3].trim();
                     String estado = datos[4].trim();
 
-                    // Aquí es donde pusimos el nuevo bloque try-catch con prints de ayuda
                     try {
                         System.out.println("Fila leída -> Estudiante: " + idEstudiante + " | Materia: " + materia + " | Fecha: " + fecha + " | Estado: " + estado);
 
-                        if (idEstudiante.equalsIgnoreCase(estudianteIdActual) && estado.equalsIgnoreCase("Pendiente")) {
+                        if (idEstudiante.equalsIgnoreCase(estudianteIdActual) && estado.equalsIgnoreCase("Obligatoria")) {
                             LocalDate fechaTutoria = LocalDate.parse(fecha, formatter);
                             boolean esVencida = fechaTutoria.isBefore(hoy);
 
-                            System.out.println("Coincide estudiante y está Pendiente. Fecha parseada: " + fechaTutoria + " | ¿Está vencida?: " + esVencida);
+                            System.out.println("Coincide estudiante y está Pendiente/Obligatoria. Fecha parseada: " + fechaTutoria + " | ¿Está vencida?: " + esVencida);
 
                             if (esVencida) {
                                 System.out.println("Tutoría descartada por estar vencida.");
