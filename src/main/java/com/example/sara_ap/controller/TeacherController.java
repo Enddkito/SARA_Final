@@ -22,12 +22,18 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherController {
+
+    @FXML private DatePicker dpFechaTutoria;
+    @FXML private ComboBox<String> cbHorarioTutoria;
 
     @FXML private Label lblBienvenida;
     @FXML private Label lblAlertaDesviacion;
@@ -74,7 +80,111 @@ public class TeacherController {
     @FXML private TableColumn<FilaTutoriaProfesor, String> colProfHorario;
     @FXML private TableColumn<FilaTutoriaProfesor, String> colProfEstado;
     private final ObservableList<FilaTutoriaProfesor> listaTutoriasProfesor = FXCollections.observableArrayList();
+    @FXML
+    private void handleEnviarTutoriaObligatoria(ActionEvent event) {
+        // 1. Validar que haya una fila seleccionada en la tabla
+        int filaSeleccionadaIndice = tblPromediosFinales.getSelectionModel().getSelectedIndex();
 
+        if (filaSeleccionadaIndice < 0) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Selección Requerida");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, seleccione un estudiante de la tabla de Promedios Finales.");
+            alert.showAndWait();
+            return;
+        }
+
+        // 2. Extraer el nombre directamente desde la celda de la columna "colFinalNombre"
+        String estudianteNombre = "";
+        if (colFinalNombre != null && colFinalNombre.getCellData(filaSeleccionadaIndice) != null) {
+            estudianteNombre = colFinalNombre.getCellData(filaSeleccionadaIndice).toString();
+        } else {
+            // Opción de respaldo: si no lee la columna de nombre, intentamos con la de cédula
+            estudianteNombre = colFinalId.getCellData(filaSeleccionadaIndice).toString();
+        }
+
+        // 3. Obtener los valores de los controles de la interfaz
+        LocalDate fecha = dpFechaTutoria.getValue();
+        String horario = cbHorarioTutoria.getValue();
+        String codigoMateria = (cmbCursos.getValue() != null) ? cmbCursos.getValue().toString() : "Asignatura General";
+
+        // 4. Validaciones de campos de fecha y hora
+        if (fecha == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Campo Incompleto");
+            alert.setHeaderText(null);
+            alert.setContentText("Debe seleccionar una fecha para la tutoría.");
+            alert.showAndWait();
+            return;
+        }
+        if (fecha.isBefore(LocalDate.now())) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Fecha Inválida");
+            alert.setHeaderText(null);
+            alert.setContentText("La fecha de la tutoría no puede ser anterior al día de hoy.");
+            alert.showAndWait();
+            return;
+        }
+        if (horario == null || horario.trim().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Campo Incompleto");
+            alert.setHeaderText(null);
+            alert.setContentText("Debe seleccionar un bloque horario.");
+            alert.showAndWait();
+            return;
+        }
+
+        // 5. Guardar en el archivo CSV correcto usando la ruta unificada dinámica (.sara_app)
+        try {
+            File archivo = new File(TUTORIAS_FILE_PATH);
+
+            // Si la carpeta contenedora (.sara_app) no existe por alguna razón, se crea automáticamente
+            File parentDir = archivo.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            boolean esNuevo = !archivo.exists();
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))) {
+                if (esNuevo) {
+                    writer.write("Estudiante,Asignatura,Fecha,Horario,Estado");
+                    writer.newLine();
+                }
+
+                // Estructura exacta: Estudiante,Asignatura,Fecha,Horario,Estado
+                String nuevaLinea = String.format("%s,%s,%s,%s,%s",
+                        estudianteNombre.trim(),
+                        codigoMateria.trim(),
+                        fecha.toString(),
+                        horario,
+                        "Pendiente"
+                );
+
+                writer.write(nuevaLinea);
+                writer.newLine();
+                writer.flush();
+            }
+
+            // Alerta informativa de éxito
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("SARA System");
+            alert.setHeaderText("¡Convocatoria Exitosa!");
+            alert.setContentText("Se registró la tutoría obligatoria de forma correcta para: " + estudianteNombre);
+            alert.showAndWait();
+
+            // 6. Limpiar campos del formulario
+            dpFechaTutoria.setValue(null);
+            cbHorarioTutoria.setValue(null);
+
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de Almacenamiento");
+            alert.setHeaderText(null);
+            alert.setContentText("No se pudo escribir en el archivo de tutorías: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
     @FXML
     public void handleLimpiarTutoria(ActionEvent event) {
         // 1. Obtener la fila seleccionada por el profesor
@@ -138,7 +248,9 @@ public class TeacherController {
     private List<Student> todosLosEstudiantes = new ArrayList<>();
     private String rutaArchivoActivo = "src/main/resources/grades.csv";
 
-    private static final String TUTORIAS_FILE_PATH = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
+    private final String TUTORIAS_FILE_PATH = System.getProperty("user.home")
+            + File.separator + ".sara_app"
+            + File.separator + "tutoring_appointments.csv";
 
     public void initData(Professor professor) {
         if (professor == null) return;
@@ -220,9 +332,10 @@ public class TeacherController {
     }
 
     private void autoajustarColumnas() {
-        if (tblNotasB1 != null) tblNotasB1.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        if (tblNotasB2 != null) tblNotasB2.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        if (tblPromediosFinales != null) tblPromediosFinales.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        if (tblNotasB1 != null) tblNotasB1.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        if (tblNotasB2 != null) tblNotasB2.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        if (tblPromediosFinales != null) tblPromediosFinales.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        if (tblTutoriasProfesor != null) tblTutoriasProfesor.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // 🔑 Sincronización elástica de la nueva tabla de tutorías
         if (tblTutoriasProfesor != null) tblTutoriasProfesor.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -264,27 +377,72 @@ public class TeacherController {
         if (tblNotasB1 != null) tblNotasB1.setEditable(true);
         if (tblNotasB2 != null) tblNotasB2.setEditable(true);
 
+        javafx.util.Callback<TableColumn<StudentRow, String>, TableCell<StudentRow, String>> cellFactoryConBloqueo = column ->
+                new TextFieldTableCell<StudentRow, String>(new javafx.util.converter.DefaultStringConverter()) {
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        if (getGraphic() instanceof TextField) {
+                            TextField textField = (TextField) getGraphic();
+
+                            // 1. Creamos el cartelito de advertencia de error
+                            Tooltip errorTooltip = new Tooltip("⚠️ SARA: Ingresa calificaciones válidas");
+                            errorTooltip.setStyle("-fx-background-color: #cc0000; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 11px; -fx-padding: 6px; -fx-background-radius: 4px;");
+                            errorTooltip.setAutoHide(true); // Se cierra solo si hacen clic fuera
+
+                            // 2. Filtro de teclado reactivo
+                            textField.setTextFormatter(new javafx.scene.control.TextFormatter<>(change -> {
+                                String nuevoTexto = change.getControlNewText();
+
+                                // Si detecta letras, símbolos o signo menos:
+                                if (nuevoTexto.contains("-") || !nuevoTexto.matches("\\d*([.,]\\d*)?")) {
+
+                                    try {
+                                        // Forzamos la aparición inmediata del cartel justo debajo de la celda activa
+                                        if (textField.getScene() != null && textField.getScene().getWindow() != null) {
+                                            errorTooltip.show(textField, 0, 5);
+                                            // Pintamos el borde y fondo de la celda de rojo de advertencia
+                                            textField.setStyle("-fx-border-color: #cc0000; -fx-border-width: 1.5px; -fx-background-color: #ffe6e6;");
+
+                                            // ⏳ Un temporizador de 1.5 segundos para limpiar la alerta automáticamente
+                                            javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1.5));
+                                            delay.setOnFinished(event -> {
+                                                errorTooltip.hide();
+                                                textField.setStyle(""); // Quitamos el color rojo para volver al estado normal
+                                            });
+                                            delay.play();
+                                        }
+                                    } catch (Exception ignored) {}
+
+                                    return null; // Destruye y bloquea la pulsación inválida
+                                }
+                                return change; // Permite el número válido
+                            }));
+                        }
+                    }
+                };
+
         // ==========================================
         // 📋 CONFIGURACIÓN DE EDICIÓN - BIMESTRE 1
         // ==========================================
         if (colPVirtualB1 != null) {
-            colPVirtualB1.setCellFactory(TextFieldTableCell.forTableColumn());
+            colPVirtualB1.setCellFactory(cellFactoryConBloqueo);
             colPVirtualB1.setOnEditCommit(e -> { e.getRowValue().setpVirtual(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 1, 0); });
         }
         if (colPPresencialB1 != null) {
-            colPPresencialB1.setCellFactory(TextFieldTableCell.forTableColumn());
+            colPPresencialB1.setCellFactory(cellFactoryConBloqueo);
             colPPresencialB1.setOnEditCommit(e -> { e.getRowValue().setpPresencial(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 1, 1); });
         }
         if (colExamenB1 != null) {
-            colExamenB1.setCellFactory(TextFieldTableCell.forTableColumn());
+            colExamenB1.setCellFactory(cellFactoryConBloqueo);
             colExamenB1.setOnEditCommit(e -> { e.getRowValue().setExamen(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 1, 2); });
         }
         if (colTalleresB1 != null) {
-            colTalleresB1.setCellFactory(TextFieldTableCell.forTableColumn());
+            colTalleresB1.setCellFactory(cellFactoryConBloqueo);
             colTalleresB1.setOnEditCommit(e -> { e.getRowValue().setTalleres(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 1, 3); });
         }
         if (colDeberesB1 != null) {
-            colDeberesB1.setCellFactory(TextFieldTableCell.forTableColumn());
+            colDeberesB1.setCellFactory(cellFactoryConBloqueo);
             colDeberesB1.setOnEditCommit(e -> { e.getRowValue().setDeberes(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 1, 4); });
         }
 
@@ -292,23 +450,23 @@ public class TeacherController {
         // 📋 CONFIGURACIÓN DE EDICIÓN - BIMESTRE 2
         // ==========================================
         if (colPVirtualB2 != null) {
-            colPVirtualB2.setCellFactory(TextFieldTableCell.forTableColumn());
+            colPVirtualB2.setCellFactory(cellFactoryConBloqueo);
             colPVirtualB2.setOnEditCommit(e -> { e.getRowValue().setpVirtual(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 2, 0); });
         }
         if (colPPresencialB2 != null) {
-            colPPresencialB2.setCellFactory(TextFieldTableCell.forTableColumn());
+            colPPresencialB2.setCellFactory(cellFactoryConBloqueo);
             colPPresencialB2.setOnEditCommit(e -> { e.getRowValue().setpPresencial(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 2, 1); });
         }
         if (colExamenB2 != null) {
-            colExamenB2.setCellFactory(TextFieldTableCell.forTableColumn());
+            colExamenB2.setCellFactory(cellFactoryConBloqueo);
             colExamenB2.setOnEditCommit(e -> { e.getRowValue().setExamen(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 2, 2); });
         }
         if (colTalleresB2 != null) {
-            colTalleresB2.setCellFactory(TextFieldTableCell.forTableColumn());
+            colTalleresB2.setCellFactory(cellFactoryConBloqueo);
             colTalleresB2.setOnEditCommit(e -> { e.getRowValue().setTalleres(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 2, 3); });
         }
         if (colDeberesB2 != null) {
-            colDeberesB2.setCellFactory(TextFieldTableCell.forTableColumn());
+            colDeberesB2.setCellFactory(cellFactoryConBloqueo);
             colDeberesB2.setOnEditCommit(e -> { e.getRowValue().setDeberes(e.getNewValue()); actualizarDatosEnMemoria(e.getRowValue(), 2, 4); });
         }
     }
@@ -346,6 +504,12 @@ public class TeacherController {
             }
         }
         onCursoSeleccionado(); // Fuerza el recalculo de totales y desviación estándar en vivo
+        try {
+            persistencia.saveAllGrades(todosLosEstudiantes);
+            System.out.println("💾 [SARA Sync] Notas actualizadas y autoguardadas en .sara_app/grades.csv");
+        } catch (Exception e) {
+            System.err.println("❌ Error en el autoguardado de calificaciones: " + e.getMessage());
+        }
     }
     @FXML
     protected void onCursoSeleccionado() {

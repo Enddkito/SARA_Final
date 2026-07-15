@@ -11,19 +11,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.DatePicker?>
+
 <AnchorPane prefHeight="650.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sara_ap.controller.TeacherController">
     <children>
-        <Label fx:id="lblBienvenida" layoutX="49.0" layoutY="38.0" prefHeight="27.0" prefWidth="443.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="👨‍🏫 Panel Docente" />
+        <!-- Título principal -->
+        <Label fx:id="lblBienvenida" layoutX="49.0" layoutY="38.0" prefHeight="27.0" prefWidth="443.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="👨‍🏫 Panel Docente" AnchorPane.leftAnchor="49.0" AnchorPane.topAnchor="38.0" />
 
-        <ComboBox fx:id="cmbCursos" layoutX="49.0" layoutY="85.0" onAction="#onCursoSeleccionado" prefWidth="250.0" promptText="Seleccione un curso..." />
+        <!-- Selector de cursos -->
+        <ComboBox fx:id="cmbCursos" layoutX="49.0" layoutY="85.0" onAction="#onCursoSeleccionado" prefWidth="250.0" promptText="Seleccione un curso..." AnchorPane.leftAnchor="49.0" AnchorPane.topAnchor="85.0" />
 
-        <TabPane layoutX="49.0" layoutY="134.0" prefHeight="350.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE">
+        <!-- 🚀 TABPANE TOTALMENTE RESPONSIVO (Anclado a Arriba, Abajo, Izquierda y Derecha) -->
+        <TabPane layoutX="49.0" layoutY="134.0" prefHeight="350.0" prefWidth="850.0" tabClosingPolicy="UNAVAILABLE"
+                 AnchorPane.topAnchor="134.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="49.0" AnchorPane.rightAnchor="49.0">
             <tabs>
                 <Tab text="Primer Bimestre">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <!-- Eliminamos tamaños fijos para que la tabla use todo el contenedor disponible -->
+                        <AnchorPane minHeight="0.0" minWidth="0.0">
                             <children>
-                                <TableView fx:id="tblNotasB1" editable="true" prefHeight="315.0" prefWidth="850.0">
+                                <TableView fx:id="tblNotasB1" editable="true" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <columns>
                                         <TableColumn fx:id="colIdB1" prefWidth="90.0" text="Cédula" />
                                         <TableColumn fx:id="colNombreB1" prefWidth="150.0" text="Estudiante" />
@@ -43,9 +52,9 @@
 
                 <Tab text="Segundo Bimestre">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0">
                             <children>
-                                <TableView fx:id="tblNotasB2" editable="true" prefHeight="315.0" prefWidth="850.0">
+                                <TableView fx:id="tblNotasB2" editable="true" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                     <columns>
                                         <TableColumn fx:id="colIdB2" prefWidth="90.0" text="Cédula" />
                                         <TableColumn fx:id="colNombreB2" prefWidth="150.0" text="Estudiante" />
@@ -67,7 +76,8 @@
                     <content>
                         <VBox spacing="10" style="-fx-padding: 15;">
                             <children>
-                                <TableView fx:id="tblPromediosFinales" prefHeight="285.0" prefWidth="820.0">
+                                <!-- VBox.vgrow="ALWAYS" estira la tabla verticalmente de forma dinámica -->
+                                <TableView fx:id="tblPromediosFinales" VBox.vgrow="ALWAYS">
                                     <columns>
                                         <TableColumn fx:id="colFinalId" prefWidth="100.0" text="Cédula" />
                                         <TableColumn fx:id="colFinalNombre" prefWidth="180.0" text="Estudiante" />
@@ -77,6 +87,24 @@
                                         <TableColumn fx:id="colFinalEstado" prefWidth="140.0" style="-fx-alignment: CENTER;" text="Estado Definitivo" />
                                     </columns>
                                 </TableView>
+                                <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 8; -fx-background-color: #fff9db; -fx-border-color: #ffe066; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    <children>
+                                        <Label text="📢 Convocar Tutoría Obligatoria:" style="-fx-font-weight: bold; -fx-text-fill: #f59f00;" />
+                                        <DatePicker fx:id="dpFechaTutoria" prefWidth="160.0" promptText="Seleccionar Fecha" />
+                                        <ComboBox fx:id="cbHorarioTutoria" prefWidth="170.0" promptText="Bloque Horario">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="07:00 - 09:00" />
+                                                    <String fx:value="09:00 - 11:00" />
+                                                    <String fx:value="11:00 - 13:00" />
+                                                    <String fx:value="14:00 - 16:00" />
+                                                    <String fx:value="16:00 - 18:00" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                        <Button mnemonicParsing="false" onAction="#handleEnviarTutoriaObligatoria" style="-fx-background-color: #f03e3e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" text="⚠️ Enviar Convocatoria" />
+                                    </children>
+                                </HBox>
                             </children>
                         </VBox>
                     </content>
@@ -113,10 +141,12 @@
             </tabs>
         </TabPane>
 
-        <Label fx:id="lblAlertaDesviacion" layoutX="49.0" layoutY="500.0" prefHeight="40.0" prefWidth="850.0" style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Seleccione un curso para calcular el rendimiento." wrapText="true" />
-        <Button layoutX="49.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLoadCSV" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📂 Cargar CSV" />
-        <Button layoutX="195.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleSaveChanges" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="💾 Guardar Cambios" />
-        <Button layoutX="350.0" layoutY="560.0" mnemonicParsing="false" onAction="#onExportPDFClick" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #8B5CF6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📄 Exportar PDF" />
-        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="🚪 Cerrar Sesión" />
+        <!-- Componentes inferiores con anclajes para mantenerlos fijos abajo -->
+        <Label fx:id="lblAlertaDesviacion" layoutX="49.0" layoutY="500.0" prefHeight="40.0" prefWidth="850.0" style="-fx-font-weight: bold; -fx-text-fill: #475569;" text="Seleccione un curso para calcular el rendimiento." wrapText="true" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="49.0" AnchorPane.rightAnchor="49.0" />
+
+        <Button layoutX="49.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLoadCSV" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #3B82F6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📂 Cargar CSV" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="49.0" />
+        <Button layoutX="195.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleSaveChanges" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="💾 Guardar Cambios" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="195.0" />
+        <Button layoutX="350.0" layoutY="560.0" mnemonicParsing="false" onAction="#onExportPDFClick" prefHeight="30.0" prefWidth="140.0" style="-fx-background-color: #8B5CF6; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="📄 Exportar PDF" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="350.0" />
+        <Button layoutX="779.0" layoutY="560.0" mnemonicParsing="false" onAction="#onLogoutClick" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" text="🚪 Cerrar Sesión" AnchorPane.bottomAnchor="60.0" AnchorPane.rightAnchor="49.0" />
     </children>
 </AnchorPane>

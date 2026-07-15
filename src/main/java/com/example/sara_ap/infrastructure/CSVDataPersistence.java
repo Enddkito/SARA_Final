@@ -24,10 +24,19 @@ public class CSVDataPersistence {
 
     // 🔑 MÉTODO INTELIGENTE DE CONTINGENCIA PARA CLASSPATH
     private InputStream getCorrectStream(String fileName) {
-        // Intento 1: Buscar directamente en la raíz (Como lo empaqueta tu pom.xml actual)
+        // Primero intentamos leer del archivo persistente local del usuario
+        String userHome = System.getProperty("user.home");
+        File localFile = new File(userHome + File.separator + ".sara_app" + File.separator + fileName);
+
+        if (localFile.exists()) {
+            try {
+                return new FileInputStream(localFile);
+            } catch (FileNotFoundException ignored) {}
+        }
+
+        // Fallback: Si no existe localmente, lee el CSV semilla del classpath (src/main/resources)
         InputStream is = getClass().getResourceAsStream("/" + fileName);
         if (is == null) {
-            // Intento 2: Buscar con el prefijo del paquete clásico
             is = getClass().getResourceAsStream(PATH_PREFIX + fileName);
         }
         return is;
@@ -35,15 +44,15 @@ public class CSVDataPersistence {
 
     // Mapeador dinámico corregido para encontrar las rutas físicas de escritura
     private File getWriteableFile(String fileName) {
-        URL resource = getClass().getResource("/" + fileName);
-        if (resource != null) {
-            return new File(resource.getFile());
+        String userHome = System.getProperty("user.home");
+        File saraFolder = new File(userHome, ".sara_app");
+
+        // Si la carpeta oculta no existe en la PC del usuario, la creamos
+        if (!saraFolder.exists()) {
+            saraFolder.mkdirs();
         }
-        resource = getClass().getResource(PATH_PREFIX + fileName);
-        if (resource != null) {
-            return new File(resource.getFile());
-        }
-        return new File("src/main/resources/" + fileName);
+
+        return new File(saraFolder, fileName);
     }
 
     // 1️⃣ CARGAR ESTUDIANTES

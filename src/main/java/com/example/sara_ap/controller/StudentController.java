@@ -21,6 +21,11 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -128,7 +133,25 @@ public class StudentController {
 
         // Desbloquear celdas numéricas de la pestaña simuladora y mapearlas al servicio independiente
         if (colSimNotaB1 != null) {
-            colSimNotaB1.setCellFactory(javafx.scene.control.cell.TextFieldTableCell.forTableColumn());
+            colSimNotaB1.setCellFactory(column -> new javafx.scene.control.cell.TextFieldTableCell<FilaDesgloseEstudiante, String>(
+                    new javafx.util.converter.DefaultStringConverter()
+            ) {
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    // Capturamos el TextField que JavaFX crea internamente al editar
+                    if (getGraphic() instanceof TextField) {
+                        TextField textField = (TextField) getGraphic();
+                        //Filtro: Solo permite números enteros o decimales (con punto o coma) mayores o iguales a 0
+                        textField.textProperty().addListener((obs, viejo, nuevo) -> {
+                            if (!nuevo.matches("\\d*([.,]\\d*)?")) {
+                                textField.setText(viejo); // Si escribe una letra o un '-', regresa al valor viejo
+                            }
+                        });
+                    }
+                }
+            });
+
             colSimNotaB1.setOnEditCommit(e -> {
                 if (!e.getRowValue().getComponente().startsWith("TOTAL")) {
                     e.getRowValue().setNotaB1(e.getNewValue());
@@ -138,7 +161,24 @@ public class StudentController {
         }
 
         if (colSimNotaB2 != null) {
-            colSimNotaB2.setCellFactory(javafx.scene.control.cell.TextFieldTableCell.forTableColumn());
+            colSimNotaB2.setCellFactory(column -> new javafx.scene.control.cell.TextFieldTableCell<FilaDesgloseEstudiante, String>(
+                    new javafx.util.converter.DefaultStringConverter()
+            ) {
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    if (getGraphic() instanceof TextField) {
+                        TextField textField = (TextField) getGraphic();
+                        //Filtro: Solo permite números enteros o decimales positivos y el 0
+                        textField.textProperty().addListener((obs, viejo, nuevo) -> {
+                            if (!nuevo.matches("\\d*([.,]\\d*)?")) {
+                                textField.setText(viejo);
+                            }
+                        });
+                    }
+                }
+            });
+
             colSimNotaB2.setOnEditCommit(e -> {
                 if (!e.getRowValue().getComponente().startsWith("TOTAL")) {
                     e.getRowValue().setNotaB2(e.getNewValue());
@@ -203,6 +243,8 @@ public class StudentController {
             comboSimuladorMaterias.getSelectionModel().selectFirst();
             cargarMateriaEnSimulador(comboSimuladorMaterias.getSelectionModel().getSelectedItem());
         }
+        String nombreCompleto = student.getFirstName().trim() + " " + student.getLastName().trim();
+        verificarTutoriasObligatorias(nombreCompleto);
     }
 
     private void refrescarDatosDesdeCSV() {
@@ -224,7 +266,7 @@ public class StudentController {
                         String est;
                         if (prom40 >= 28.0) {
                             est = "Aprobado";
-                        } else if (t1 < 16.0 && t2 == 0.0) {
+                        } else if (t1 < 14.0 && t2 == 0.0) {
                             est = "Alerta: Tutoría";
                         } else {
                             est = "Supletorio";
@@ -277,17 +319,33 @@ public class StudentController {
         PredictiveService.PredictionResult res = predictiveService.calcularPrediccion(listaNotasDesglose, materia);
         lblAcumuladoPredictivo.setText(String.format("%.2f / 40.00", res.acumuladoActual));
 
-        if (res.enRiesgo) {
-            lblNotaNecesaria.setText("N/A (Supletorio)");
-            if (panelAgendamiento != null) {
-                panelAgendamiento.setVisible(true);
-                panelAgendamiento.setManaged(true);
-            }
-        } else {
+        // 🔍 REGLA DE NEGOCIO CORREGIDA:
+        // Verificamos si el profesor ya ingresó AL MENOS una nota en el segundo bimestre
+        boolean tieneNotasEnB2 = (b2[0] > 0 || b2[1] > 0 || b2[2] > 0 || b2[3] > 0 || b2[4] > 0);
+
+        if (tieneNotasEnB2) {
+            // Si ya hay notas en el B2, se cierra la ventana de tutorías preventivas por completo
             lblNotaNecesaria.setText(res.requeridoExamenB2 == 0 ? "0.00 / 10.00" : String.format("%.2f / 10.00", res.requeridoExamenB2));
             if (panelAgendamiento != null) {
                 panelAgendamiento.setVisible(false);
                 panelAgendamiento.setManaged(false);
+            }
+        } else {
+            // Si NO tiene notas en B2, mantenemos la lógica anterior para el Primer Bimestre
+            boolean calificaParaTutoria = (totalB1 < 16.0) || res.enRiesgo;
+
+            if (calificaParaTutoria) {
+                lblNotaNecesaria.setText("N/A (Supletorio)");
+                if (panelAgendamiento != null) {
+                    panelAgendamiento.setVisible(true);
+                    panelAgendamiento.setManaged(true);
+                }
+            } else {
+                lblNotaNecesaria.setText(res.requeridoExamenB2 == 0 ? "0.00 / 10.00" : String.format("%.2f / 10.00", res.requeridoExamenB2));
+                if (panelAgendamiento != null) {
+                    panelAgendamiento.setVisible(false);
+                    panelAgendamiento.setManaged(false);
+                }
             }
         }
 
@@ -340,7 +398,7 @@ public class StudentController {
         double[] b2 = new double[]{0,0,0,0,0};
         String cedulaBuscar = estudianteLogueado.getId().trim();
 
-        // 🔍 BÚSQUEDA AGREGADA Y GENÉRICA: Buscamos en el sistema por el nombre exacto de la materia del ComboBox
+        // BÚSQUEDA AGREGADA Y GENÉRICA: Buscamos en el sistema por el nombre exacto de la materia del ComboBox
         for (Student s : estudiantesSistema) {
             if (s.getId().trim().equals(cedulaBuscar) && s.getEnrollments() != null) {
                 for (Enrollment e : s.getEnrollments()) {
@@ -354,7 +412,7 @@ public class StudentController {
             }
         }
 
-        // 📊 Llenamos la tabla del simulador usando las estructuras dinámicas clonadas de la memoria
+        //Llenamos la tabla del simulador usando las estructuras dinámicas clonadas de la memoria
         listaSimuladorDesglose.add(new FilaDesgloseEstudiante("P. Virtual (10%)", b1[0], b2[0]));
         listaSimuladorDesglose.add(new FilaDesgloseEstudiante("P. Presencial (20%)", b1[1], b2[1]));
         listaSimuladorDesglose.add(new FilaDesgloseEstudiante("Examen (30%)", b1[2], b2[2]));
@@ -442,5 +500,96 @@ public class StudentController {
         public StringProperty notaB2Property() { return notaB2; }
         public String getNotaB2() { return notaB2Property().get(); }
         public void setNotaB2(String n) { notaB2Property().set(n); }
+    }
+    private void verificarTutoriasObligatorias(String estudianteIdActual) {
+        String filePath = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            file = new File("tutoring_appointments.csv");
+        }
+        if (!file.exists()) {
+            System.out.println("⚠️ El archivo CSV de tutorías no existe.");
+            return;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");      LocalDate hoy = LocalDate.now();
+
+        System.out.println("\n--- 🔍 INICIANDO VERIFICACIÓN DE TUTORÍAS PARA: " + estudianteIdActual + " (Hoy es: " + hoy + ") ---");
+
+        String ultimaMateria = null;
+        String ultimaFechaStr = null;
+        String ultimoHorario = null;
+        LocalDate ultimaFechaValida = null;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            int lineCount = 0;
+            while ((line = br.readLine()) != null) {
+                lineCount++;
+                if (lineCount == 1) continue; // Saltar cabecera
+
+                String[] datos = line.split(",");
+                if (datos.length >= 5) {
+                    String idEstudiante = datos[0].trim();
+                    String materia = datos[1].trim();
+                    String fecha = datos[2].trim();
+                    String horario = datos[3].trim();
+                    String estado = datos[4].trim();
+
+                    // Aquí es donde pusimos el nuevo bloque try-catch con prints de ayuda
+                    try {
+                        System.out.println("Fila leída -> Estudiante: " + idEstudiante + " | Materia: " + materia + " | Fecha: " + fecha + " | Estado: " + estado);
+
+                        if (idEstudiante.equalsIgnoreCase(estudianteIdActual) && estado.equalsIgnoreCase("Pendiente")) {
+                            LocalDate fechaTutoria = LocalDate.parse(fecha, formatter);
+                            boolean esVencida = fechaTutoria.isBefore(hoy);
+
+                            System.out.println("Coincide estudiante y está Pendiente. Fecha parseada: " + fechaTutoria + " | ¿Está vencida?: " + esVencida);
+
+                            if (esVencida) {
+                                System.out.println("Tutoría descartada por estar vencida.");
+                                continue;
+                            }
+
+                            if (ultimaFechaValida == null || fechaTutoria.isAfter(ultimaFechaValida)) {
+                                ultimaFechaValida = fechaTutoria;
+                                ultimaMateria = materia;
+                                ultimaFechaStr = fecha;
+                                ultimoHorario = horario;
+                                System.out.println("Candidata seleccionada temporalmente: " + materia);
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.err.println("   ⚠️ Error procesando fecha '" + fecha + "'. Detalle: " + e.getMessage());
+                    }
+                }
+            }
+
+            System.out.println("--- 🏁 FIN DE LA LECTURA DEL CSV ---");
+
+            // Mostrar la alerta si encontramos una tutoría vigente
+            if (ultimaFechaValida != null) {
+                System.out.println("Mostrando alerta en pantalla para la materia: " + ultimaMateria);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("SARA - CONVOCATORIA OBLIGATORIA");
+                alert.setHeaderText("⚠️ ATENCIÓN: Tutoría de Rescate Obligatoria ⚠️");
+                alert.setContentText(String.format(
+                        "Tu docente de la asignatura '%s' ha generado una convocatoria obligatoria de acompañamiento académico.\n\n" +
+                                "📅 Fecha: %s\n" +
+                                "⏰ Horario: %s\n" +
+                                "📌 Lugar: Cubículo del Docente / Presencial\n\n" +
+                                "Por favor, asiste puntualmente para revisar tus aportes y asegurar tu continuidad académica.",
+                        ultimaMateria, ultimaFechaStr, ultimoHorario
+                ));
+                alert.getDialogPane().setStyle("-fx-font-family: 'Segoe UI';");
+                alert.showAndWait();
+            } else {
+                System.out.println("No se encontró ninguna tutoría pendiente y vigente para mostrar.");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo CSV: " + e.getMessage());
+        }
     }
 }
