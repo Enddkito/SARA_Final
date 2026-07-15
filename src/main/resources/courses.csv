@@ -1,49 +1,57 @@
 codigo_materia,nombre_materia,id_profesor
+MATD113,Álgebra Lineal,9998888888
 CUV101,Cálculo en Una Variable,9991111111
-ED202,Estructuras de Datos,9992222222
 FC303,Física Clásica,9993333333
 FISD134,Mecánica Newtoniana,9995555555
-MATD223,Probabilidad y Estadística Básicas,9996666666
-MATD213,Ecuaciones Diferenciales Ordinarias,9997777777
-MATD143,Álgebra Lineal,9998888888
 ICCD144,Programación I,9999999999
-ICCD332,Programación II,9991010101
 CSHD111,Comunicación Oral y Escrita,9991112121
+
+MATD213,Ecuaciones Diferenciales Ordinarias,9997777777
 ISID223,Introducción a los Sistemas de Información,9991213131
 ISID232,Fundamentos de Ciencias de la Computación,9991314141
+ICCD332,Programación II,9991010101
 ICCD244,Arquitectura de Computadores,9991415151
-ICCD343,Estructura de Datos y Algoritmos I,9991516161
-ICCD353,Fundamentos de Redes y Conectividad,9991617171
+ED202,Estructuras de Datos,9992222222
+
+MATD223,Probabilidad y Estadística Básicas,9996666666
 ICCD323,Sistemas Operativos,9991718181
 ISWD453,Fundamentos de Bases de Datos,9991819191
+ICCD343,Estructura de Datos y Algoritmos I,9991516161
+ICCD353,Fundamentos de Redes y Conectividad,9991010101
+
 IDSD413,Fundamentos de Big Data,9991920202
+IDSD422,Estadística y Programación para Ciencias de Datos I,9991010101
 ICCD422,Compiladores y Lenguajes,9992021212
-IDSD422,Estadística y Programación para Ciencias de Datos I,9992122222
-IDSD533,Computación Numérica,9992223232
-ISID432,Desarrollo y Mantenimiento de Software,9992324242
-ADMD511,Gestión Organizacional,9992425252
-IDSD522,Procesamiento de Datos Masivos,9992526262
-IDSD613,Almacenamiento de Datos Masivos,9992627272
-IDSD422,Visualización de Datos,9992728282
-IDSD633,Aprendizaje Automático I,9992829292
-IDSD713,Aprendizaje Automático II,9992930303
-IDSD723,Minería de Datos I,9993031313
-IDSD733,Minería de Datos II,9993132323
-ICCD643,Tecnologías de Seguridad de Software,9993233333
-IDSD742,Computación Paralela para Big Data,9993334343
-IDSD813,Servicios en la Nube para Big Data,9993435353
-IDSD823,Seguridad y Privacidad de Datos,9993536363
-ISID642,User Experience,9993637373
-ICCD523,Inteligencia Artificial,9993738383
+ICCD442,Estructura de Datos y Algoritmos II,9991516161
 ISWD553,Bases de Datos Distribuidas,9993839393
 CSHD300,Asignatura de Artes y Humanidades,9993940404
+PSCD202,Prácticas de Servicio Comunitario,9994344444
+
+IDSD533,Computación Numérica,9992223232
+ICCD523,Inteligencia Artificial,9993738383
+ISID432,Desarrollo y Mantenimiento de Software,9992324242
 CSHD400,Asignatura de Economía y Sociedad,9994041414
+ADMD511,Gestión Organizacional,9992425252
+IDSD613,Almacenamiento de Datos Masivos,9992627272
+IDSD742,Computación Paralela para Big Data,9991010101
+IDSD633,Aprendizaje Automático I,9992829292
+
+IDSD522,Procesamiento de Datos Masivos,9992526262
+IDSD713,Aprendizaje Automático II,9992930303
+ICCD643,Tecnologías de Seguridad de Software,9993233333
+IDSD723,Minería de Datos I,9993031313
+IDSD823,Seguridad y Privacidad de Datos,9993536363
+ISID642,User Experience,9993637373
 ADMD711,Gestion de Procesos y Calidad,9994142424
 ICCD353,Ingeniería Financiera,9994243434
-PSCD202,Prácticas de Servicio Comunitario,9994344444
-IDSD933,Aplicaciones Emergentes de Ciencia de Datos,9994445454
-TITD201,Administración de Proyectos de Ciencia de Datos,9994546464
+
+IDSD422,Visualización de Datos,9992728282
+IDSD813,Servicios en la Nube para Big Data,9993435353
+IDSD733,Minería de Datos II,9993132323
 IDSD942,Analítica Avanzada,9994647474
 ICCD842,Profesionalismo en Informática,9994748484
+
 TITD104,Trabajo de Integración Curricular,9994849494
 PRLD105,Prácticas Laborales,9994950505
+IDSD933,Aplicaciones Emergentes de Ciencia de Datos,9994445454
+TITD201,Administración de Proyectos de Ciencia de Datos,9994546464

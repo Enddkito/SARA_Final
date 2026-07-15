@@ -40,12 +40,12 @@ public class PredictiveService {
         }
 
         // REGLA 1: Evaluación del Primer Bimestre (Si B1 < 16.00 y B2 está en cero, salta alerta de tutoría)
-        if (notaB1 < 16.00 && notaB2 == 0.0) {
+        if (notaB1 < 14.00 && notaB2 == 0.0) {
             double faltaParaDieciseis = 16.00 - notaB1;
             return new PredictionResult(
                     notaB1,
                     faltaParaDieciseis,
-                    "⚠️ ALERTA PRIMER BIMESTRE: Tu nota en B1 es de " + String.format("%.2f", notaB1) + " / 20.00 (Menor al umbral de 16.00). Panel de agendamiento de tutorías habilitado para rescate académico.",
+                    "⚠️ ALERTA PRIMER BIMESTRE: Tu nota en B1 es de " + String.format("%.2f", notaB1) + " / 20.00 (Menor al umbral de 14.00). Panel de agendamiento de tutorías habilitado para rescate académico.",
                     "#b91c1c",
                     true
             );

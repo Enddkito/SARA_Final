@@ -62,4 +62,23 @@ public class TutoriaDocumentService {
 
         alert.showAndWait();
     }
+    public void registrarTutoriaObligatoria(String estudianteId, String asignatura, LocalDate fecha, String horario) throws java.io.IOException {
+        if (fecha == null || horario == null || horario.isEmpty()) {
+            throw new IllegalArgumentException("Campos de fecha u horario incompletos.");
+        }
+
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFormateada = fecha.format(formatter);
+
+        // Reutilizamos la lógica del archivo dinámico o el PATH_PREFIX que tengas configurado
+        String filePath = "src/main/resources/com/example/sara_ap/tutoring_appointments.csv";
+
+        // Guardamos con el estado "Obligatoria"
+        try (java.io.FileWriter fw = new java.io.FileWriter(filePath, true);
+             java.io.PrintWriter pw = new java.io.PrintWriter(fw)) {
+
+            pw.println(String.format("%s,%s,%s,%s,Obligatoria", estudianteId, asignatura, fechaFormateada, horario));
+            System.out.println("💾 [SARA Sync] Tutoría obligatoria persistida en el repositorio.");
+        }
+    }
 }
