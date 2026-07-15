@@ -156,8 +156,3 @@ Sugerencia: añade un archivo `CONTRIBUTING.md` y `CODE_OF_CONDUCT.md` para faci
 Este proyecto utiliza la licencia que se encuentra en el archivo `LICENSE` del repositorio.
 
 ---
-
-## ✉️ Contacto
-
-- Autor: Enddkito — https://github.com/Enddkito
-- Para soporte o preguntas, usa Issues en este repositorio.
